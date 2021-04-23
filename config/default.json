@@ -1,0 +1,45 @@
+{
+    "db": {
+        "url": "mongodb://93.188.167.68:33017",
+        "database": "trademax"
+    },
+    "app": {
+        "url": "http://93.188.167.68",
+        "port": 4500
+    },
+    "webServer": {
+        "url": "http://93.188.167.68/",
+        "port": 4500
+    },
+    "stripe": {
+        "public": "pk_test_51IOjFUH8FPQioJubHEprnHOrA1QyKEOiokB8Ji4RlM10MUzMwzi00OGfiTonBvA0WEyYV8e6tb6O0OCi0gt0AbhX00Wpdi68ZY",
+        "private": "sk_test_51IOjFUH8FPQioJub18IPEv5DPlsdFM7L90iLaGQhsf4MfIEQYMAnJSo2KIYJbGqS68oeBn8Ndc04m10pgnPeP6Hx00DOSxb8t7"
+    },
+    "auth": {
+        "jwtKey": "supersecret"
+    },
+    "image": {
+        "url": "http://93.188.167.68/projects/trademax_nodejs/assets/images/",
+        "port": 4500
+    },
+    "providers": {},
+    "logger": {
+        "logStart": false,
+        "file": {
+            "filename": "logs/logs.json",
+            "level": "silly",
+            "handleExceptions": true,
+            "json": true,
+            "maxsize": 512000,
+            "maxFiles": 5,
+            "colorize": false
+        },
+        "console": {
+            "level": "debug",
+            "handleExceptions": true,
+            "json": false,
+            "colorize": true
+        },
+        "http": {}
+    }
+}
