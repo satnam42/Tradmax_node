@@ -1,5 +1,5 @@
 module.exports = [{
-        url: "/create",
+        url: "/register",
         post: {
             summary: "create",
             description: "create",

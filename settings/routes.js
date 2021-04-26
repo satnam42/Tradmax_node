@@ -41,7 +41,7 @@ const configure = (app, logger) => {
 
     //user api's //
     app.post(
-        "/api/users/create",
+        "/api/users/register",
         permit.context.builder,
         validator.users.create,
         api.users.create
