@@ -223,6 +223,19 @@ const configure = (app, logger) => {
         permit.context.builder,
         api.events.remove
     );
+    
+    /* Category Section */
+    app.post(
+        "/api/categories/createCategory",
+        permit.context.builder,
+        api.categories.createCategory
+    );
+
+    app.post(
+        "/api/categories/createSubCategory",
+        permit.context.builder,
+        api.categories.createSubCategory
+    );
 
     ///////////////notifications api's /////////////////
     // app.get(
