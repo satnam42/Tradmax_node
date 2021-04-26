@@ -16,10 +16,6 @@ const create = (req, res, next) => {
         log.end();
         return response.failure(res, "password is required");
     }
-    if (!req.body.roleId) {
-        log.end();
-        return response.failure(res, "role Id is required");
-    }
     log.end();
     return next();
 };
@@ -34,14 +30,6 @@ const login = (req, res, next) => {
     if (!req.body.email) {
         log.end();
         return response.failure(res, "email is required");
-    }
-    if (!req.body.firmName) {
-        log.end();
-        return response.failure(res, "firm Name is required");
-    }
-    if (!req.body.accountName) {
-        log.end();
-        return response.failure(res, "account Name is required");
     }
     if (!req.body.password) {
         log.end();

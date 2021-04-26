@@ -1,10 +1,7 @@
 module.exports = [{
     name: "login",
     properties: {
-        accountName: {
-            type: "string"
-        },
-        firmName: {
+        email: {
             type: "string"
         },
         password: {

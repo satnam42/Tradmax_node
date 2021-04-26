@@ -31,7 +31,7 @@ const getOtpToken = (otp, id, isExpired, context) => {
     const options = {};
 
     if (isExpired) {
-        options.expiresIn = '4m';
+        options.expiresIn = '14m';
     }
 
     const token = jwt.sign(extractFrom, authConfig.jwtKey, options);

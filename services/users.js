@@ -1,24 +1,23 @@
+const encrypt = require("../permit/crypto.js");
+const auth = require("../permit/auth");
+var nodemailer = require('nodemailer')
 //register user
-
 const buildUser = async(model, context) => {
-    const { firstName, lastName, accountName, companyName, firmName, state, city, zipCode, efin, noOfeFiledReturnslastYear, phoneNumber, doYouOfferBankProducts, email, password, roleId, } = model;
+    const { status, fullname, country, address, otp, state, city, zipCode, phoneNumber, email, password, roleId, } = model;
     const log = context.logger.start(`services:users:build${model}`);
     const user = await new db.user({
-        firstName: firstName,
-        lastName: lastName,
+        fullname: fullname,
         phoneNumber: phoneNumber,
         email: email,
-        accountName: accountName,
-        companyName: companyName,
-        firmName: firmName,
+        address: address,
         state: state,
         city: city,
+        country: country,
         zipCode: zipCode,
-        efin: efin,
-        noOfeFiledReturnslastYear: noOfeFiledReturnslastYear,
-        doYouOfferBankProducts: doYouOfferBankProducts,
+        otp: otp,
         role: roleId,
         password: password,
+        status: status,
         createdOn: new Date(),
         updateOn: new Date()
     }).save();
@@ -28,17 +27,15 @@ const buildUser = async(model, context) => {
 
 const create = async(model, context) => {
     const log = context.logger.start("services:users:create");
-    // const isEmail = await db.user.findOne({ email: { $eq: model.email } });
-    const role = await db.role.findOne({ type: { $eq: 'user' } });
-    // if (isEmail) {
-    //     throw new Error("Email already exists");
-    // } else {
-    model.roleId = role._id
+    const isEmail = await db.user.findOne({ email: { $eq: model.email } });
+    if (isEmail) {
+        throw new Error("Email already exists");
+    } else {
     model.password = encrypt.getHash(model.password, context);
     const user = buildUser(model, context);
     log.end();
     return user;
-    // }
+    }
 
 };
 
@@ -48,12 +45,8 @@ const login = async(model, context) => {
     const log = context.logger.start("services:users:login");
 
     const query = {};
-
-    query.accountName = model.accountName;
-    query.password = model.password;
-    query.firmName = model.firmName;
-    let user = await db.user.findOne(query).populate('role')
-
+    query.email = model.email;
+    let user = await db.user.findOne(query)
     if (!user) {
         log.end();
         throw new Error("user not found");
@@ -242,8 +235,8 @@ const sendMail = async(email, message, subject) => {
     var smtpTrans = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
-            user: `javascript.mspl@gmail.com`,
-            pass: `showmydev#$!45`
+            user: `emmieandrewwork@gmail.com`,
+            pass: `Notsure%1`
         }
     });
     // email send to registered email

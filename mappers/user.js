@@ -8,12 +8,16 @@ exports.toModel = entity => {
 
     const model = {
         id: entity._id,
-        firstName: entity.firstName,
-        lastName: entity.lastName,
+        fullname: entity.fullname,
         phoneNumber: entity.phoneNumber,
         status: entity.status,
         email: entity.email,
+        state: entity.state,
+        city: entity.city,
+        country: entity.country,
+        zipCode: entity.zipCode,
         token: entity.token,
+        status: entity.status,
         sex: entity.sex,
         deviceToken: entity.deviceToken,
         avatar: entity.image ? `${imageUrl}${entity.image.image}` : ""

@@ -49,12 +49,12 @@ const validateToken = async (req, res, next) => {
 
     req.context.user = user
 
-    try {
-        let isPermission = await checkPermission(req.context.user, req.method)
+    // try {
+    //     let isPermission = await checkPermission(req.context.user, req.method)
 
-    } catch (error) {
-        throw new Error(error.message)
-    }
+    // } catch (error) {
+    //     throw new Error(error.message)
+    // }
     log.end();
     return next();
 
