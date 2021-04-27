@@ -9,7 +9,7 @@ dist/
 
 # Compiled Java class files
 *.class
-
+assets/images
 # Compiled Python bytecode
 *.py[cod]
 

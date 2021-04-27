@@ -137,30 +137,30 @@ module.exports = [{
         }
     },
 
-    // {
-    //     url: "/getUsers",
-    //     get: {
-    //         summary: "getUsers",
-    //         description: "Just hit the api without pass any param",
-    //         parameters: [
-    //             {
-    //                 in: "header",
-    //                 name: "x-access-token",
-    //                 description: "token to access api",
-    //                 required: true,
-    //                 type: "string"
-    //             },
-    //         ],
-    //         responses: {
-    //             default: {
-    //                 description: "Unexpected error",
-    //                 schema: {
-    //                     $ref: "#/definitions/Error"
-    //                 }
-    //             }
-    //         }
-    //     }
-    // },
+    {
+        url: "/getUsers",
+        get: {
+            summary: "getUsers",
+            description: "Just hit the api without pass any param",
+            parameters: [
+                {
+                    in: "header",
+                    name: "x-access-token",
+                    description: "token to access api",
+                    required: false,
+                    type: "string"
+                },
+            ],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
     // {
     //     url: "/currentUser/{id}",
     //     get: {

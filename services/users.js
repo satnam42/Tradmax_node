@@ -105,7 +105,7 @@ const changePassword = async(id, model, context) => {
 // getUsers
 const getUsers = async(query, context) => {
     const log = context.logger.start(`services:users:getUsers`);
-    let allUsers = await db.user.find().populate('image');
+    let allUsers = await db.user.find();
     allUsers.count = await db.user.find().count();
     log.end();
     return allUsers;

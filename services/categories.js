@@ -39,27 +39,35 @@ const createSubCategory = async (files, body, context) => {
 };
 
 
-const allCategories = async (context) => {
+const getCategories = async (body,context) => {
     const log = context.logger.start(`services:categories:allCategories`);
-    const categories = await db.category.find().populate('user', 'firstName');
-    log.end();
-    return categories;
+    if(body.category_id){
+        const categories = await db.category.find({ parent_id: body.category_id });
+        log.end();
+        return categories;
+    }else{
+        const categories = await db.category.find({ parent_id: '0'});
+        log.end();
+        return categories;
+    }
 };
 
-// const removeEventsById = async (id, context) => {
-//     const log = context.logger.start(`services:events:removeEventsById`);
-//     if (!id) throw new Error("event id is required");
-//     let isDeleted = await db.event.deleteOne({ _id: id })
-//     if (!isDeleted) {
-//         throw new Error("something went wrong");
-//     }
-//     log.end();
-//     return
-// };
+const removeCategoriesById = async (id, context) => {
+    const log = context.logger.start(`services:categories:removeCategoriesById`);
+    if (!id) throw new Error("Category id is required");
+    const checksubcat = await db.category.find({ parent_id: id }).count()
+    if(checksubcat > 0){
+        throw new Error("This category has subcategories");
+    }
+    let isDeleted = await db.category.deleteOne({ _id: id })
+    if (!isDeleted) {
+        throw new Error("something went wrong");
+    }
+    log.end();
+    return
+};
 
 exports.createCategory = createCategory;
 exports.createSubCategory = createSubCategory;
-exports.allCategories = allCategories;
-// exports.update = update;
-// exports.allEvents = allEvents;
-// exports.removeEventsById = removeEventsById;
+exports.getCategories = getCategories;
+exports.removeCategoriesById = removeCategoriesById;

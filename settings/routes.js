@@ -80,7 +80,7 @@ const configure = (app, logger) => {
 
     app.get(
         "/api/users/getUsers",
-        permit.context.validateToken,
+        permit.context.builder,
         api.users.getUsers
     );
 
@@ -235,6 +235,18 @@ const configure = (app, logger) => {
         "/api/categories/createSubCategory",
         permit.context.builder,
         api.categories.createSubCategory
+    );
+
+    app.post(
+        "/api/categories/getCategories",
+        permit.context.builder,
+        api.categories.getCategories
+    );
+
+    app.delete(
+        "/api/categories/delete/:id",
+        permit.context.builder,
+        api.categories.remove
     );
 
     ///////////////notifications api's /////////////////
