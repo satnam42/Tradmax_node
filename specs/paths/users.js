@@ -22,6 +22,29 @@ module.exports = [{
         }
     },
     {
+        url: "/adminlogin",
+        post: {
+            summary: "Admin Login",
+            description: "login",
+            parameters: [{ in: "body",
+                name: "body",
+                description: "Model of Admin login",
+                required: true,
+                schema: {
+                    $ref: "#/definitions/login"
+                }
+            }],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
         url: "/login",
         post: {
             summary: "login",

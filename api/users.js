@@ -4,6 +4,20 @@ const response = require("../exchange/response");
 const userMapper = require("../mappers/user");
 
 //register api
+
+const adminlogin = async (req, res) => {
+    const log = req.context.logger.start("api:users:adminlogin");
+    try {
+        const user = await service.adminlogin(req.body, req.context);
+        log.end();
+        return response.authorized(res, userMapper.toModel(user), user.token);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
 const create = async (req, res) => {
     const log = req.context.logger.start(`api:users:create`);
     try {
@@ -158,4 +172,5 @@ exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;
 exports.update = update;
 exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
+exports.adminlogin = adminlogin;
 // exports.uploadProfilePic = uploadProfilePic;

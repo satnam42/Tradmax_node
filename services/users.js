@@ -66,6 +66,36 @@ const setUser = (model, user, context) => {
 
 };
 
+const adminlogin = async(model, context) => {
+    const log = context.logger.start("services:users:login");
+
+    const query = {};
+    query.email = model.email;
+    query.role = 'Admin';
+    let user = await db.user.findOne(query)
+    if (!user) {
+        log.end();
+        throw new Error("admin not found");
+    }
+
+    if (user.status === 'inactive') {
+        throw new Error("admin Is inactive please contect with admin");
+    }
+    const isMatched = encrypt.compareHash(model.password, user.password, context);
+    if (!isMatched) {
+        log.end();
+        throw new Error("password mismatch");
+    }
+
+    const token = auth.getToken(user.id, false, context);
+    user.token = token;
+    user.updatedOn = new Date();
+    user.save();
+    log.end();
+    return user;
+};
+
+
 const create = async(model, context) => {
     const log = context.logger.start("services:users:create");
     const isEmail = await db.user.findOne({ email: { $eq: model.email } });
@@ -310,4 +340,5 @@ exports.deleteUser = deleteUser;
 exports.update = update;
 exports.sendOtp = sendOtp;
 exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
+exports.adminlogin = adminlogin;
 // exports.uploadProfilePic = uploadProfilePic;

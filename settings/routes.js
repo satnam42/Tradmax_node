@@ -40,6 +40,14 @@ const configure = (app, logger) => {
 
 
     //user api's //
+
+    app.post(
+        "/api/users/adminlogin",
+        permit.context.builder,
+        // validator.users.adminlogin,
+        api.users.adminlogin
+    );
+
     app.post(
         "/api/users/register",
         permit.context.builder,

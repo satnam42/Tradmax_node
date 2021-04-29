@@ -11,7 +11,6 @@ const user = mongoose.Schema({
     city: { type: String, required: false, trim: true, },
     country: { type: String, required: false, trim: true, },
     zipCode: { type: String, required: false, trim: true, },
-    // efin: { type: Boolean, default: false, required: true },
     token: { type: String, default: "" }, //access token
     status: {
         type: String,
