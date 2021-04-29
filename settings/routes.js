@@ -249,6 +249,21 @@ const configure = (app, logger) => {
         api.categories.remove
     );
 
+    /* Products Section */
+    
+    app.post(
+        "/api/products/addProduct",
+        permit.context.builder,
+        api.products.create
+    );
+
+    app.put(
+        "/api/products/uploadImage/:id",
+        permit.context.builder, 
+        // upload.single('image'),
+        api.products.uploadProductImage
+    );
+
     ///////////////notifications api's /////////////////
     // app.get(
     //     "/api/notifications/listByUserId/:id",

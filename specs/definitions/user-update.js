@@ -1,10 +1,10 @@
 module.exports = [{
     name: "updateUser",
     properties: {
-        firstName: {
+        fullname: {
             type: "string"
         },
-        lastName: {
+        address: {
             type: "string"
         },
         phoneNumber: {
@@ -13,10 +13,16 @@ module.exports = [{
         sex: {
             type: 'string'
         },
-        status: {
-            enum: ['active', 'inactive']
+        state: {
+            type: "string",
         },
-        roleId: {
+        city: {
+            type: "string",
+        },
+        country: {
+            type: "string",
+        },
+        zipCode: {
             type: "string",
         },
         deviceToken: {

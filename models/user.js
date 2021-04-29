@@ -27,11 +27,7 @@ const user = mongoose.Schema({
     //     type: { type: String, default: "Point" , required: true,},
     //     coordinates: [Number]
     // },
-    role: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'role',
-        required: false
-    },
+    role: { type: String, required: false,default: "User" },
     deviceToken: { type: String, default: "" },
     createdOn: { type: Date, default: Date.now },
     updatedOn: { type: Date, default: Date.now },

@@ -1,0 +1,34 @@
+"use strict";
+const mongoose = require("mongoose");
+const product = mongoose.Schema({
+    name: { type: String, default: "", required: true },
+    units: { type: Number, required: true },
+    variation: {
+        key: { type: String }, //color,size
+        items: [
+            {
+                value: { type: String }, //red,blue,white
+                price:{type: String} //10,20,50
+            },
+        ]
+    },
+    status: {
+        type: String, default: "active",
+        enum: ["active", "inActive", "out of stock"]
+    },
+    subCategory: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "subCategories"
+        },
+        name: { type: String, default: "" }
+    },
+    description: { type: String, required: true },
+    // price: { type: String, required: true },
+    image: { type: String },
+    createdOn: { type: Date, default: Date.now },
+    updatedOn: { type: Date, default: Date.now }
+});
+
+mongoose.model("product", product);
+module.exports = product;

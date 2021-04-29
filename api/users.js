@@ -148,8 +148,6 @@ const search = async (req, res) => {
 };
 
 
-
-
 exports.login = login;
 exports.create = create;
 exports.search = search;
@@ -160,5 +158,4 @@ exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;
 exports.update = update;
 exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
-
 // exports.uploadProfilePic = uploadProfilePic;

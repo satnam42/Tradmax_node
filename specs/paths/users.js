@@ -136,7 +136,6 @@ module.exports = [{
             }
         }
     },
-
     {
         url: "/getUsers",
         get: {
@@ -161,134 +160,134 @@ module.exports = [{
             }
         }
     },
-    // {
-    //     url: "/currentUser/{id}",
-    //     get: {
-    //         summary: "currentUser",
-    //         description: "currentUser",
-    //         parameters: [
-    //             {
-    //                 in: "header",
-    //                 name: "x-access-token",
-    //                 description: "token to access api",
-    //                 required: true,
-    //                 type: "string"
-    //             },
-    //             {
-    //                 in: "path",
-    //                 type: "string",
-    //                 name: "id",
-    //                 description: "user id",
-    //                 required: true
-    //             },],
-    //         responses: {
-    //             default: {
-    //                 description: "Unexpected error",
-    //                 schema: {
-    //                     $ref: "#/definitions/Error"
-    //                 }
-    //             }
-    //         }
-    //     }
-    // },
-    // {
-    //     url: "/delete/{id}",
-    //     delete: {
-    //         summary: "delete",
-    //         description: "delete",
-    //         parameters: [
-    //             {
-    //                 in: "header",
-    //                 name: "x-access-token",
-    //                 description: "token to access api",
-    //                 required: true,
-    //                 type: "string"
-    //             },
-    //             {
-    //                 in: "path",
-    //                 type: "string",
-    //                 name: "id",
-    //                 description: "user id",
-    //                 required: true
-    //             },],
-    //         responses: {
-    //             default: {
-    //                 description: "Unexpected error",
-    //                 schema: {
-    //                     $ref: "#/definitions/Error"
-    //                 }
-    //             }
-    //         }
-    //     }
-    // },
-    // {
-    //     url: "/update/{id}",
-    //     put: {
-    //         summary: "update",
-    //         description: "update",
-    //         parameters: [
-    //             {
-    //                 in: "header",
-    //                 name: "x-access-token",
-    //                 description: "token to access api",
-    //                 required: true,
-    //                 type: "string"
-    //             },
-    //             {
-    //                 in: "path",
-    //                 type: "string",
-    //                 name: "id",
-    //                 description: "user id",
-    //                 required: true
-    //             },
-    //             {
-    //                 in: "body",
-    //                 name: "body",
-    //                 description: "Model of user login",
-    //                 required: true,
-    //                 schema: {
-    //                     $ref: "#/definitions/updateUser"
-    //                 }
-    //             }
-    //         ],
-    //         responses: {
-    //             default: {
-    //                 description: "Unexpected error",
-    //                 schema: {
-    //                     $ref: "#/definitions/Error"
-    //                 }
-    //             }
-    //         }
-    //     }
-    // },
-    // {
-    //     url: "/uploadProfilePic/{id}",
-    //     put: {
-    //         summary: "upload Profile Pic ",
-    //         description: "upload Profile Pic ",
-    //         parameters: [{
-    //             in: "formData",
-    //             name: "image",
-    //             type: "file",
-    //             description: "The file to upload.",
-    //             required: true,
-    //         },
-    //         {
-    //             in: "path",
-    //             type: "string",
-    //             name: "id",
-    //             description: "user id",
-    //             required: true
-    //         }
-    //         ],
-    //         responses: {
-    //             default: {
-    //                 description: "Unexpected error",
-    //                 schema: {
-    //                     $ref: "#/definitions/Error"
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+    {
+        url: "/currentUser/{id}",
+        get: {
+            summary: "currentUser",
+            description: "currentUser",
+            parameters: [
+                {
+                    in: "header",
+                    name: "x-access-token",
+                    description: "token to access api",
+                    required: true,
+                    type: "string"
+                },
+                {
+                    in: "path",
+                    type: "string",
+                    name: "id",
+                    description: "user id",
+                    required: true
+                },],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
+        url: "/delete/{id}",
+        delete: {
+            summary: "delete",
+            description: "delete",
+            parameters: [
+                {
+                    in: "header",
+                    name: "x-access-token",
+                    description: "token to access api",
+                    required: true,
+                    type: "string"
+                },
+                {
+                    in: "path",
+                    type: "string",
+                    name: "id",
+                    description: "user id",
+                    required: true
+                },],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
+        url: "/update/{id}",
+        put: {
+            summary: "update",
+            description: "update",
+            parameters: [
+                {
+                    in: "header",
+                    name: "x-access-token",
+                    description: "token to access api",
+                    required: true,
+                    type: "string"
+                },
+                {
+                    in: "path",
+                    type: "string",
+                    name: "id",
+                    description: "user id",
+                    required: true
+                },
+                {
+                    in: "body",
+                    name: "body",
+                    description: "Model of user login",
+                    required: true,
+                    schema: {
+                        $ref: "#/definitions/updateUser"
+                    }
+                }
+            ],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
+        url: "/uploadProfilePic/{id}",
+        put: {
+            summary: "upload Profile Pic ",
+            description: "upload Profile Pic ",
+            parameters: [{
+                in: "formData",
+                name: "image",
+                type: "file",
+                description: "The file to upload.",
+                required: true,
+            },
+            {
+                in: "path",
+                type: "string",
+                name: "id",
+                description: "user id",
+                required: true
+            }
+            ],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    }
 ];

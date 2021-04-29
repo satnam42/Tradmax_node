@@ -25,6 +25,47 @@ const buildUser = async(model, context) => {
     return user;
 };
 
+const setUser = (model, user, context) => {
+    const log = context.logger.start("services:users:set");
+    if (model.fullname !== "string" && model.fullname !== undefined) {
+        user.fullname = model.fullname;
+    }
+
+    if (model.phoneNumber !== "string" && model.phoneNumber !== undefined) {
+        user.phoneNumber = model.phoneNumber;
+    }
+
+    if (model.deviceToken !== "string" && model.deviceToken !== undefined) {
+        user.deviceToken = model.deviceToken;
+    }
+
+    if (model.address !== "string" && model.address !== undefined) {
+        user.address = model.address;
+    }
+
+    if (model.state !== "string" && model.state !== undefined) {
+        user.state = model.state;
+    }
+
+    if (model.sex !== "string" && model.sex !== undefined) {
+        user.sex = model.sex;
+    }
+    if (model.city !== "string" && model.city !== undefined) {
+        user.city = model.city;
+    }
+    if (model.country !== "string" && model.country !== undefined) {
+        user.country = model.country;
+    }
+    if (model.zipCode !== "string" && model.zipCode !== undefined) {
+        user.zipCode = model.zipCode;
+    }
+
+    log.end();
+    user.save();
+    return user;
+
+};
+
 const create = async(model, context) => {
     const log = context.logger.start("services:users:create");
     const isEmail = await db.user.findOne({ email: { $eq: model.email } });
@@ -269,5 +310,4 @@ exports.deleteUser = deleteUser;
 exports.update = update;
 exports.sendOtp = sendOtp;
 exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
-
 // exports.uploadProfilePic = uploadProfilePic;
