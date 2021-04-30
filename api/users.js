@@ -81,7 +81,7 @@ const getUsers = async (req, res) => {
     const log = req.context.logger.start(`api:users:getUsers`);
     try {
         const user = await service.getUsers(req.body, req.context);
-        const message = "User get Successfully";
+        const message = "Users get Successfully";
         log.end();
         return response.success(res, message, userMapper.toSearchModel(user));
     } catch (err) {
@@ -96,8 +96,9 @@ const deleteUser = async (req, res) => {
     const log = req.context.logger.start(`api:users:deleteUser`);
     try {
         const user = await service.deleteUser(req.params.id, req.context);
+        const message = "User Deleted Successfully";
         log.end();
-        return response.data(res, user);
+        return response.data(res, message, user);
     } catch (err) {
         log.error(err);
         log.end();
@@ -109,8 +110,9 @@ const update = async (req, res) => {
     const log = req.context.logger.start(`api:users:update`);
     try {
         const user = await service.update(req.params.id, req.body, req.context);
+        const message = "User Updated Successfully";
         log.end();
-        return response.data(res, userMapper.toModel(user));
+        return response.data(res, message, user);
     } catch (err) {
         log.error(err);
         log.end();

@@ -41,7 +41,7 @@ const validateToken = async (req, res, next) => {
         return response.failure(res, "token is invalid");
     }
 
-    const user = await db.user.findById(details._id).populate('role');;
+    const user = await db.user.findById(details._id);
 
     if (!user) {
         return response.failure(res, "invalid user");

@@ -25,10 +25,11 @@ const unAuthorized = (res, message) => {
   });
 };
 
-const data = (res, data) => {
+const data = (res, message, data) => {
   res.status(200).json({
     isSuccess: true,
     statusCode: 200,
+    message: message,
     data: data
   });
 };
