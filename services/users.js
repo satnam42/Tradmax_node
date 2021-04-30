@@ -187,7 +187,7 @@ const currentUser = async(id, model, context) => {
     if (!id) {
         throw new Error("user id is required");
     }
-    let user = await db.user.findById(id).populate('image');
+    let user = await db.user.findById(id);
     if (!user) {
         throw new Error("user not found");
     }

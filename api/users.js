@@ -37,8 +37,9 @@ const login = async (req, res) => {
     const log = req.context.logger.start("api:users:login");
     try {
         const user = await service.login(req.body, req.context);
+        const message = "User logged in successfully";
         log.end();
-        return response.authorized(res, userMapper.toModel(user), user.token);
+        return response.authorized(res, message,userMapper.toModel(user), user.token);
     } catch (err) {
         log.error(err);
         log.end();
@@ -53,7 +54,7 @@ const currentUser = async (req, res) => {
         const user = await service.currentUser(req.params.id, req.body, req.context);
         const message = "Current User";
         log.end();
-        return response.success(res, message, userMapper.toModel(user));
+        return response.success(res, message, user);
     } catch (err) {
         log.error(err);
         log.end();

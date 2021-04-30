@@ -64,7 +64,7 @@ const configure = (app, logger) => {
 
     app.get(
         "/api/users/currentUser/:id",
-        permit.context.validateToken,
+        permit.context.builder,
         api.users.currentUser
     );
 

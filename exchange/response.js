@@ -44,13 +44,14 @@ const page = (res, data, pageNo, pageSize, total) => {
   });
 };
 
-const authorized = (res, data, token) => {
+const authorized = (res, message, data, token) => {
   res
     .status(200)
     .set("x-access-token", token)
     .json({
       isSuccess: true,
       statusCode: 200,
+      message: message,
       data: data
     });
 };
