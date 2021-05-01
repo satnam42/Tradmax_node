@@ -272,6 +272,27 @@ const configure = (app, logger) => {
         api.products.uploadProductImage
     );
 
+    app.get(
+        "/api/products/productsBySubCategories",
+        permit.context.builder,
+        // validator.users.create, 
+        api.products.productsBySubCategories
+    );
+
+    /* Cart Section */
+    
+    app.post(
+        "/api/carts/addToCart",
+        permit.context.builder,
+        api.carts.create
+    );
+
+    app.get(
+        "/api/carts/getCarts",
+        permit.context.builder,
+        api.carts.getCarts
+    );
+
     ///////////////notifications api's /////////////////
     // app.get(
     //     "/api/notifications/listByUserId/:id",

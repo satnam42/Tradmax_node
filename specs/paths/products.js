@@ -138,24 +138,31 @@ module.exports = [
         }
     },
     {
-        url: "/uploadImage/{id}",
-        put: {
-            summary: "upload product image ",
-            description: "upload product image ",
+        url: "/productsBySubCategories",
+        get: {
+            summary: "Homelisting API",
+            description: "product  by SUbcategories",
             parameters: [
+                // {
+                //     in: "query",
+                //     type: "integer",
+                //     name: "pageNo",
+                //     description: "pageNo",
+                //     required: true
+                // },
+                // {
+                //     in: "query",
+                //     type: "integer",
+                //     name: "pageSize",
+                //     description: "pageSize",
+                //     required: true
+                // },
                 {
-                    in: "formData",
-                    name: "image",
-                    type: "file",
-                    description: "The file to upload.",
-                    required: true,
-                },
-                {
-                    in: "path",
-                    name: "id",
-                    description: "product id",
-                    required: true,
-                    type: "string"
+                    in: "query",
+                    type: "string",
+                    name: "subCategoryId",
+                    description: "pass subcat ID here",
+                    required: true
                 },
             ],
             responses: {
@@ -168,6 +175,65 @@ module.exports = [
             }
         }
     },
+    {
+        url: "/uploadProductImage/{id}",
+        put: {
+            summary: "Upload Product Files",
+            description: "Upload Property Files ",
+            parameters: [{ in: "formData",
+                    name: "files[]",
+                    type: "file",
+                    description: "The file to upload.",
+                    required: true,
+                },
+                { in: "path",
+                    type: "string",
+                    name: "id",
+                    description: "Product Id",
+                    required: true
+                }
+            ],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    // {
+    //     url: "/uploadImage/{id}",
+    //     put: {
+    //         summary: "upload product image ",
+    //         description: "upload product image ",
+    //         parameters: [
+    //             {
+    //                 in: "formData",
+    //                 name: "image",
+    //                 type: "file",
+    //                 description: "The file to upload.",
+    //                 required: true,
+    //             },
+    //             {
+    //                 in: "path",
+    //                 name: "id",
+    //                 description: "product id",
+    //                 required: true,
+    //                 type: "string"
+    //             },
+    //         ],
+    //         responses: {
+    //             default: {
+    //                 description: "Unexpected error",
+    //                 schema: {
+    //                     $ref: "#/definitions/Error"
+    //                 }
+    //             }
+    //         }
+    //     }
+    // },
     // {
     //     url: "/addQuantity/{id}",
     //     put: {
