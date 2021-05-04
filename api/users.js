@@ -98,7 +98,7 @@ const deleteUser = async (req, res) => {
         const user = await service.deleteUser(req.params.id, req.context);
         const message = "User Deleted Successfully";
         log.end();
-        return response.data(res, message, user);
+        return response.data(res, message);
     } catch (err) {
         log.error(err);
         log.end();
