@@ -105,7 +105,6 @@ module.exports = [{
         }
     },
 
-
     {
         url: "/otpVerifyAndChangePassword",
         post: {
@@ -123,6 +122,37 @@ module.exports = [{
                     required: true,
                     schema: {
                         $ref: "#/definitions/verifyOtp"
+                    }
+                }
+            ],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
+        url: "/newPassword",
+        put: {
+            summary: "Set New Password",
+            description: "Set new Password",
+            parameters: [{ in: "header",
+                    name: "x-access-token",
+                    description: "token to access api",
+                    required: true,
+                    type: "string"
+                },
+
+                { in: "body",
+                    name: "body",
+                    description: "Model of newPassword",
+                    required: true,
+                    schema: {
+                        $ref: "#/definitions/newPassword"
                     }
                 }
             ],

@@ -5,9 +5,9 @@ module.exports = [
             otp: {
                 type: "string"
             },
-            newPassword: {
-                type: "string"
-            },
+            // newPassword: {
+            //     type: "string"
+            // },
         }
     }
 ];

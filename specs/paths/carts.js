@@ -49,6 +49,32 @@ module.exports = [{
         }
     },
     {
+        url: "/addToFav",
+        post: {
+            summary: "addToFav",
+            description: "addToFav product",
+            parameters: [
+                {
+                    in: "body",
+                    name: "body",
+                    description: "Model of addToFav",
+                    required: true,
+                    schema: {
+                        $ref: "#/definitions/addToFav"
+                    }
+                }
+            ],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
         url: "/addQuantity/{id}",
         put: {
             summary: "add Quantity ",

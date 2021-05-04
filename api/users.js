@@ -126,9 +126,23 @@ const otpVerifyAndChangePassword = async (req, res) => {
     const log = req.context.logger.start("api:users:otpVerify");
     try {
         const data = await service.otpVerifyAndChangePassword(req.body, req.headers["x-access-token"], req.context);
-        const message = "Password Updated Successfully"
-        log.end();
+        const message = "Otp verified"
+        log.end()
         return response.success(res, message, data);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
+const newPassword = async (req, res) => {
+    const log = req.context.logger.start("api:users:newPassword");
+    try {
+        const data = await service.newPassword(req.body, req.context);
+        const message = "Password Updated"
+        log.end();
+        return response.success(res, message);
     } catch (err) {
         log.error(err);
         log.end();
@@ -175,5 +189,6 @@ exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;
 exports.update = update;
 exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
+exports.newPassword = newPassword;
 exports.adminlogin = adminlogin;
 // exports.uploadProfilePic = uploadProfilePic;

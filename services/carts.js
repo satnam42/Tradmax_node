@@ -44,6 +44,23 @@ const build = async (model, context) => {
     return carts;
 };
 
+// const buildFavorite = async (model, context) => {
+//     const { user, product, variation, isFav, status } = model;
+//     const log = context.logger.start(`services:carts:buildFavorite${model}`);
+//     let favModel = {
+//         user: user,
+//         product: product,
+//         isFav: isFav,
+//         status: status,
+//         variation: variation,
+//         createdOn: new Date(),
+//         updatedOn: new Date()
+//     }
+//     const favproduct = await new db.favorite(favModel).save();
+//     log.end();
+//     return favproduct;
+// };
+
 const create = async (model, context) => {
     const log = context.logger.start("services:carts:create");
     isProductExists = await db.product.findById(model.product)
@@ -53,6 +70,28 @@ const create = async (model, context) => {
         const cart = build(model, context);
         log.end();
         return cart;
+    }
+};
+
+const addToFav = async (model, context) => {
+    const log = context.logger.start("services:carts:addToFav");
+    isProductExists = await db.favorite.findById(model.product)
+    if(isProductExists){
+        let removeProduct = await db.favorite.deleteOne(model.product);
+        log.end();
+    }else{
+        let favModel = {
+            user: model.userId,
+            product: model.productId,
+            // isFav: isFav,
+            // status: status,
+            variation: model.variation,
+            createdOn: new Date(),
+            updatedOn: new Date()
+        }
+        const favproduct = await new db.favorite(favModel).save();
+        log.end();
+        return favproduct;
     }
 };
 
@@ -88,16 +127,17 @@ const getCarts = async (query, context) => {
 
 // };
 
-// const deleteProduct = async (id, context) => {
-//     const log = context.logger.start(`services:assignLeads:deletePotentialCustomer`);
+const deleteProduct = async (id, context) => {
+    const log = context.logger.start(`services:assignLeads:deletePotentialCustomer`);
 
-//     let isProductExists = await db.products.findById(id);
-//     await db.products.remove({ '_id': id });
-//     log.end();
-//     return isProductExists
-// };
+    let isProductExists = await db.products.findById(id);
+    await db.products.remove({ '_id': id });
+    log.end();
+    return isProductExists
+};
 
 
 exports.create = create;
 exports.getCarts = getCarts;
-// exports.deleteProduct = deleteProduct;
+exports.deleteProduct = deleteProduct;
+exports.addToFav = addToFav;

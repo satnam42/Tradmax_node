@@ -112,6 +112,12 @@ const configure = (app, logger) => {
         api.users.otpVerifyAndChangePassword
     );
 
+    app.put(
+        "/api/users/newPassword",
+        permit.context.validateToken,
+        api.users.newPassword
+    );
+
     //role api's //
 
     app.post(
@@ -287,10 +293,22 @@ const configure = (app, logger) => {
         api.carts.create
     );
 
+    app.post(
+        "/api/carts/addToFav",
+        permit.context.builder,
+        api.carts.addToFav
+    );
+
     app.get(
         "/api/carts/getCarts",
         permit.context.builder,
         api.carts.getCarts
+    );
+
+    app.delete(
+        "/api/carts/delete/:id",
+        permit.context.builder,
+        api.carts.deleteItem
     );
 
     ///////////////notifications api's /////////////////

@@ -257,7 +257,7 @@ const sendOtp = async(user, context) => {
 
 }
 
-const otpVerifyAndChangePassword = async(model, token, context) => {
+const otpVerifyAndChangePassword = async(model, context) => {
     const log = context.logger.start('services/users/otpVerified')
     const otpDetail = await auth.extractToken(token, context)
 
@@ -270,7 +270,24 @@ const otpVerifyAndChangePassword = async(model, token, context) => {
     if (otpDetail.otp.name === "JsonWebTokenError") {
         throw new Error("otp is invalid");
     }
-    let user = context.user
+    let user = context.user;
+    user = await db.user.findById(user.id);
+    if (!user) {
+        throw new Error("user not found");
+    }
+
+    // const newPassword = encrypt.getHash(model.newPassword, context);
+    // user.password = newPassword;
+    // user.updatedOn = new Date();
+    // await user.save();
+    log.end();
+
+    return;
+}
+
+const newPassword = async(model, context) => {
+    const log = context.logger.start('services/users/newPassword')
+    let user = context.user;
     user = await db.user.findById(user.id);
     if (!user) {
         throw new Error("user not found");
@@ -282,8 +299,7 @@ const otpVerifyAndChangePassword = async(model, token, context) => {
     await user.save();
     log.end();
 
-    log.end()
-    return
+    return;
 }
 
 // forgetPassword
@@ -297,9 +313,9 @@ const forgotPassword = async(model, context) => {
     if (!data) {
         throw new Error('something went wrong')
     }
-    log.end()
+    log.end();
 
-    return data
+    return data;
 }
 
 const sendMail = async(email, message, subject) => {
@@ -340,5 +356,6 @@ exports.deleteUser = deleteUser;
 exports.update = update;
 exports.sendOtp = sendOtp;
 exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
+exports.newPassword = newPassword;
 exports.adminlogin = adminlogin;
 // exports.uploadProfilePic = uploadProfilePic;

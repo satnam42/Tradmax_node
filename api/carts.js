@@ -17,6 +17,20 @@ const create = async (req, res) => {
     }
 };
 
+const addToFav = async (req, res) => {
+    const log = req.context.logger.start(`api:carts:addToFav`);
+    try {
+        const cart = await service.addToFav(req.body, req.context);
+        const message = "Added to favouirte Successfully";
+        log.end();
+        return response.success(res, message, cart);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
 const getCarts = async (req, res) => {
     const log = req.context.logger.start(`api:carts:getCarts`);
     try {
@@ -45,22 +59,23 @@ const getCarts = async (req, res) => {
 //     }
 // };
 
-// const deleteProduct = async (req, res) => {
-//     const log = req.context.logger.start(`api:products:deleteProduct:${req.params.id}`);
-//     try {
-//         const task = await service.deleteProduct(req.params.id, req.context);
-//         log.end();
-//         let message = "product deleted Successfully";
-//         log.end();
-//         return response.success(res, message);
-//     } catch (err) {
-//         log.error(err);
-//         log.end();
-//         return response.failure(res, err.message);
-//     }
-// };
+const deleteItem = async (req, res) => {
+    const log = req.context.logger.start(`api:products:deleteItem:${req.params.id}`);
+    try {
+        const task = await service.deleteItem(req.params.id, req.context);
+        log.end();
+        let message = "Product Removed Successfully";
+        log.end();
+        return response.success(res, message);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
 
 
 exports.create = create;
 exports.getCarts = getCarts;
-// exports.deleteProduct = deleteProduct
+exports.addToFav = addToFav
+exports.deleteItem = deleteItem

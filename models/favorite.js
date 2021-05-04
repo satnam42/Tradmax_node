@@ -1,6 +1,6 @@
 "use strict";
 const mongoose = require("mongoose");
-const cart = mongoose.Schema({
+const favorite = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
@@ -11,17 +11,16 @@ const cart = mongoose.Schema({
         ref: 'product',
         required: true
     },
-    quantity: { type: Number, required: true },
+    isFav: { type: String, default: true },
     // tax: { type: Number, default: 10 },
-    total: { type: Number, required: true },
     variation: { type: String, required: true },
     status: {
-        type: String, default: "Cart",
-        enum: ["Cart", "Ordered", "Delivered"]
+        type: String, default: "favorite",
+        enum: ["Cart", "Ordered", "Delivered","favorite"]
     },
     createdOn: { type: Date, default: Date.now },
     updatedOn: { type: Date, default: Date.now }
 });
 
-mongoose.model("cart", cart);
-module.exports = cart;
+mongoose.model("favorite", favorite);
+module.exports = favorite;
