@@ -45,7 +45,7 @@ const productsBySubCategories = async (req, res) => {
         const products = await service.productsBySubCategories(req.query, req.context);
         let message = "Products Fetched Successfully";
         log.end();
-        return response.success(res, message, products);
+        return response.page(message,res, products, Number(req.query.pageNo) || 1, Number(req.query.pageSize) || 10, products.count)
     } catch (err) {
         log.error(err);
         log.end();

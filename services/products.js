@@ -178,17 +178,10 @@ const uploadProductImage = async (id, file, context) => {
 
 const productsBySubCategories = async (query, context) => {
         const log = context.logger.start(`services:productsBySubCategories:get`);
-        // let subCategories = [];
-        // query.subCategories = query.subCategories.split(",");
-        // query.subCategories.forEach(function (opt) {
-        //     subCategories.push(new RegExp(opt, "i"));
-        // });
-        // let pageNo = Number(query.pageNo) || 1;
-        // let pageSize = Number(query.pageSize) || 10;
-        // let skipCount = pageSize * (pageNo - 1);
-        const products = await db.product.find({ "subCategory.id": query.subCategoryId })
-            // .skip(skipCount)
-            // .limit(pageSize);
+        let pageNo = Number(query.pageNo) || 1;
+        let pageSize = Number(query.pageSize) || 10;
+        let skipCount = pageSize * (pageNo - 1);
+        const products = await db.product.find({ "subCategory.id": query.subCategoryId }).skip(skipCount).limit(pageSize);
         log.end();
         return products;
     };
