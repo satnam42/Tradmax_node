@@ -1,6 +1,6 @@
 {
     "db": {
-        "url": "mongodb://localhost:27017",
+        "url": "mongodb://93.188.167.68:33017",
         "database": "trademax"
     },
     "app": {
@@ -19,7 +19,7 @@
         "jwtKey": "supersecret"
     },
     "image": {
-        "url": "http://localhost/trademax_nodejs/",
+        "url": "http://93.188.167.68/projects/trademax_nodejs/",
         "port": 4604
     },
     "providers": {},

@@ -1,4 +1,3 @@
-const imageUrl = require('config').get('image').url
 const ObjectId = require("mongodb").ObjectID;
 
 // const set = async (model, carts, context) => {
@@ -44,23 +43,6 @@ const build = async (model, context) => {
     return carts;
 };
 
-// const buildFavorite = async (model, context) => {
-//     const { user, product, variation, isFav, status } = model;
-//     const log = context.logger.start(`services:carts:buildFavorite${model}`);
-//     let favModel = {
-//         user: user,
-//         product: product,
-//         isFav: isFav,
-//         status: status,
-//         variation: variation,
-//         createdOn: new Date(),
-//         updatedOn: new Date()
-//     }
-//     const favproduct = await new db.favorite(favModel).save();
-//     log.end();
-//     return favproduct;
-// };
-
 const create = async (model, context) => {
     const log = context.logger.start("services:carts:create");
     isProductExists = await db.product.findById(model.product)
@@ -83,11 +65,8 @@ const addToFav = async (model, context) => {
         let favModel = {
             user: model.userId,
             product: model.productId,
-            // isFav: isFav,
-            // status: status,
             variation: model.variation,
-            createdOn: new Date(),
-            updatedOn: new Date()
+            createdOn: new Date()
         }
         const favproduct = await new db.favorite(favModel).save();
         log.end();
