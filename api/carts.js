@@ -88,10 +88,6 @@ const deleteItem = async (req, res) => {
     const log = req.context.logger.start(`api:products:deleteItem:${req.params.id}`);
     try {
         const cartItem = await service.deleteItem(req.params.id, req.context);
-        // log.end();
-        // let message = "Cart Item Removed Successfully";
-        // log.end();
-        // return response.success(res, message);
         if (cartItem.err === null || cartItem.err === undefined) {
             let message = "Cart Item Removed Successfully";
             log.end();

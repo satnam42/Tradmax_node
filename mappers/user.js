@@ -19,7 +19,7 @@ exports.toModel = entity => {
         token: entity.token,
         sex: entity.sex,
         deviceToken: entity.deviceToken,
-        // image: entity.image ? `${imageUrl}${entity.image.image}` : ""
+        image: entity.image ? entity.image : ""
     };
 
     // if (entity.image && entity.image.gallery && entity.image.gallery.length > 0) {

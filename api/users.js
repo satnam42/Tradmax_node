@@ -80,10 +80,11 @@ const changePassword = async (req, res) => {
 const getUsers = async (req, res) => {
     const log = req.context.logger.start(`api:users:getUsers`);
     try {
-        const user = await service.getUsers(req.body, req.context);
+        const user = await service.getUsers(req.query, req.context);
         const message = "Users get Successfully";
         log.end();
-        return response.success(res, message, userMapper.toSearchModel(user));
+        return response.page(message,res, userMapper.toSearchModel(user), Number(req.query.pageNo) || 1, Number(req.query.pageSize) || 10, user.count)
+        // return response.success(res, message, userMapper.toSearchModel(user));
     } catch (err) {
         log.error(err);
         log.end();

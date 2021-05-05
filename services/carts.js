@@ -26,14 +26,14 @@ const ObjectId = require("mongodb").ObjectID;
 // };
 
 const build = async (model, context) => {
-    const { user, product, quantity, total, variation, status } = model;
+    const { userId, productId, quantity, total, variation, status } = model;
     const log = context.logger.start(`services:carts:build${model}`);
     let productModel = {
-        user: model.userId,
-        product: model.productId,
-        quantity: model.quantity,
-        total: model.total,
-        status: model.status,
+        user: userId,
+        product: productId,
+        quantity: quantity,
+        total: total,
+        status: status,
         variation: variation,
         createdOn: new Date(),
         updatedOn: new Date()
@@ -45,12 +45,12 @@ const build = async (model, context) => {
 
 const create = async (model, context) => {
     const log = context.logger.start("services:carts:create");
-    isProductExists = await db.product.findById(model.
+    const isProductExists = await db.product.findById(model.
         productId)
     if(!isProductExists){
         throw new Error("product not found");
     }else{
-        checkcart = await db.cart.findOne({ 
+        const checkcart = await db.cart.findOne({ 
             user: { $eq: ObjectId(model.userId) }, 
             product: { $eq: ObjectId(model.productId) },
             variation: { $eq: model.variation } 
@@ -74,7 +74,7 @@ const getCarts = async (query, context) => {
 
 const addToFav = async (model, context) => {
     const log = context.logger.start("services:carts:addToFav");
-    isProductExists = await db.favorite.findOne({ 
+    const isProductExists = await db.favorite.findOne({ 
         user: { $eq: ObjectId(model.userId) }, 
         product: { $eq: ObjectId(model.productId) },
         variation: { $eq: model.variation } 

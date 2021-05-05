@@ -34,8 +34,9 @@ const data = (res, message, data) => {
   });
 };
 
-const page = (res, data, pageNo, pageSize, total) => {
+const page = (message, res, data, pageNo, pageSize, total) => {
   res.status(200).json({
+    message: message,
     isSuccess: true,
     statusCode: 200,
     pageNo: pageNo,

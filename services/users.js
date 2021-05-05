@@ -2,7 +2,7 @@ const encrypt = require("../permit/crypto.js");
 const auth = require("../permit/auth");
 var nodemailer = require('nodemailer')
 const imageUrl = require('config').get('image').url
-const path = require("path");
+
 //register user
 const buildUser = async(model, context) => {
     const { status, fullname, country, address, otp, state, city, zipCode, phoneNumber, email, password, roleId, } = model;
@@ -178,8 +178,13 @@ const changePassword = async(id, model, context) => {
 // getUsers
 const getUsers = async(query, context) => {
     const log = context.logger.start(`services:users:getUsers`);
-    let allUsers = await db.user.find();
-    allUsers.count = await db.user.find().count();
+    let pageNo = Number(query.pageNo) || 1
+    let pageSize = Number(query.pageSize) || 10
+
+    let skipCount = pageSize * (pageNo - 1)
+    // let allUsers = await db.user.find().skip(skipCount).limit(pageSize);
+    const allUsers = await db.user.find().sort({ _id: 1 }).skip(skipCount).limit(pageSize)
+    // allUsers.count = await db.user.find().count();
     log.end();
     return allUsers;
 };
