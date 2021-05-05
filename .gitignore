@@ -8,6 +8,7 @@ node_modules/
 dist/
 .jshintrc
 /logs
+/config
 # Compiled Java class files
 *.class
 assets/images

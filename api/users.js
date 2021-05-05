@@ -178,6 +178,18 @@ const search = async (req, res) => {
     }
 };
 
+const uploadImage = async (req, res) => {
+    const log = req.context.logger.start(`api:users:uploadImage`);
+    try {
+        const url = await service.uploadImage(req.files, req.body, req.context);
+        log.end();
+        return response.data(res, url);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
 
 exports.login = login;
 exports.create = create;
@@ -191,4 +203,4 @@ exports.update = update;
 exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
 exports.newPassword = newPassword;
 exports.adminlogin = adminlogin;
-// exports.uploadProfilePic = uploadProfilePic;
+exports.uploadImage = uploadImage;

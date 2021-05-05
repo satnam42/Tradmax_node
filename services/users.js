@@ -1,6 +1,8 @@
 const encrypt = require("../permit/crypto.js");
 const auth = require("../permit/auth");
 var nodemailer = require('nodemailer')
+const imageUrl = require('config').get('image').url
+const path = require("path");
 //register user
 const buildUser = async(model, context) => {
     const { status, fullname, country, address, otp, state, city, zipCode, phoneNumber, email, password, roleId, } = model;
@@ -345,6 +347,32 @@ const sendMail = async(email, message, subject) => {
     }
 }
 
+const uploadImage = async (files, body, context) => {
+    const log = context.logger.start(`services:users:uploadImage`);
+    if (!files) {
+        throw new Error("image not found");
+    }
+    let user = await db.user.findById(body.id);
+    if (!user) {
+        throw new Error("user not found");
+    }
+    if (user.image != "" && user.image !== undefined) {
+
+        let picUrl = user.image.replace(`${imageUrl}`, '');
+        try {
+            await fs.unlinkSync(`${picUrl}`)
+            console.log('File unlinked!');
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    const image = imageUrl + 'assets/images/' + files[0].filename
+    user.image = image
+    await user.save();
+    log.end();
+    return user
+};
+
 exports.login = login;
 exports.create = create;
 exports.search = search;
@@ -358,4 +386,4 @@ exports.sendOtp = sendOtp;
 exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
 exports.newPassword = newPassword;
 exports.adminlogin = adminlogin;
-// exports.uploadProfilePic = uploadProfilePic;
+exports.uploadImage = uploadImage;

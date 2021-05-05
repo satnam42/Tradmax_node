@@ -118,6 +118,12 @@ const configure = (app, logger) => {
         api.users.newPassword
     );
 
+    app.post(
+        '/api/users/uploadImage',
+        permit.context.builder,
+        api.users.uploadImage
+    );
+
     //role api's //
 
     app.post(
@@ -300,13 +306,19 @@ const configure = (app, logger) => {
     );
 
     app.get(
+        "/api/carts/getFav",
+        permit.context.builder,
+        api.carts.getFav
+    );
+
+    app.get(
         "/api/carts/getCarts",
         permit.context.builder,
         api.carts.getCarts
     );
 
     app.delete(
-        "/api/carts/delete/:id",
+        "/api/carts/deleteItem/:id",
         permit.context.builder,
         api.carts.deleteItem
     );

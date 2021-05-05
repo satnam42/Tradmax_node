@@ -313,25 +313,53 @@ module.exports = [{
             }
         }
     },
+    // {
+    //     url: "/uploadProfilePic/{id}",
+    //     put: {
+    //         summary: "upload Profile Pic ",
+    //         description: "upload Profile Pic ",
+    //         parameters: [{
+    //             in: "formData",
+    //             name: "image",
+    //             type: "file",
+    //             description: "The file to upload.",
+    //             required: true,
+    //         },
+    //         {
+    //             in: "path",
+    //             type: "string",
+    //             name: "id",
+    //             description: "user id",
+    //             required: true
+    //         }
+    //         ],
+    //         responses: {
+    //             default: {
+    //                 description: "Unexpected error",
+    //                 schema: {
+    //                     $ref: "#/definitions/Error"
+    //                 }
+    //             }
+    //         }
+    //     }
+    // },
     {
-        url: "/uploadProfilePic/{id}",
-        put: {
-            summary: "upload Profile Pic ",
-            description: "upload Profile Pic ",
-            parameters: [{
-                in: "formData",
-                name: "image",
-                type: "file",
-                description: "The file to upload.",
-                required: true,
-            },
-            {
-                in: "path",
-                type: "string",
-                name: "id",
-                description: "user id",
-                required: true
-            }
+        url: "/uploadImage",
+        post: {
+            summary: "uploadImage",
+            description: "uploadImage",
+            parameters: [{ in: "formData",
+                    type: "string",
+                    name: "id",
+                    description: "User Id",
+                    required: true
+                },
+                { in: "formData",
+                    name: "file",
+                    type: "file",
+                    description: "The Signature file to upload.",
+                    required: true
+                },
             ],
             responses: {
                 default: {
@@ -342,5 +370,5 @@ module.exports = [{
                 }
             }
         }
-    }
+    },
 ];

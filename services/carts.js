@@ -29,11 +29,11 @@ const build = async (model, context) => {
     const { user, product, quantity, total, variation, status } = model;
     const log = context.logger.start(`services:carts:build${model}`);
     let productModel = {
-        user: user,
-        product: product,
-        quantity: quantity,
-        total: total,
-        status: status,
+        user: model.userId,
+        product: model.productId,
+        quantity: model.quantity,
+        total: model.total,
+        status: model.status,
         variation: variation,
         createdOn: new Date(),
         updatedOn: new Date()
@@ -45,22 +45,48 @@ const build = async (model, context) => {
 
 const create = async (model, context) => {
     const log = context.logger.start("services:carts:create");
-    isProductExists = await db.product.findById(model.product)
+    isProductExists = await db.product.findById(model.
+        productId)
     if(!isProductExists){
         throw new Error("product not found");
     }else{
-        const cart = build(model, context);
-        log.end();
-        return cart;
+        checkcart = await db.cart.findOne({ 
+            user: { $eq: ObjectId(model.userId) }, 
+            product: { $eq: ObjectId(model.productId) },
+            variation: { $eq: model.variation } 
+        });
+        if(!checkcart){
+            const cart = build(model, context);
+            log.end();
+            return cart;
+        }else{
+            throw new Error("product already in cart");
+        }
     }
+};
+
+const getCarts = async (query, context) => {
+    const log = context.logger.start(`services:getCarts:get`);
+    const carts = await db.cart.find({ "user": ObjectId(query.userId) }).populate('user').populate('product');
+    log.end();
+    return carts;
 };
 
 const addToFav = async (model, context) => {
     const log = context.logger.start("services:carts:addToFav");
-    isProductExists = await db.favorite.findById(model.product)
+    isProductExists = await db.favorite.findOne({ 
+        user: { $eq: ObjectId(model.userId) }, 
+        product: { $eq: ObjectId(model.productId) },
+        variation: { $eq: model.variation } 
+    });
     if(isProductExists){
-        let removeProduct = await db.favorite.deleteOne(model.product);
+        let removeProduct = await db.favorite.deleteOne({ 
+            user: { $eq: ObjectId(model.userId) }, 
+            product: { $eq: ObjectId(model.productId) },
+            variation: { $eq: model.variation } 
+        });
         log.end();
+        return removeProduct
     }else{
         let favModel = {
             user: model.userId,
@@ -83,11 +109,11 @@ const addToFav = async (model, context) => {
 // };
 
 
-const getCarts = async (query, context) => {
-    const log = context.logger.start(`services:getCarts:get`);
-    const carts = await db.cart.find({ "subCategory.id": query.subCategoryId })
+const getFav = async (query, context) => {
+    const log = context.logger.start(`services:carts:getFav`);
+    const favProducts = await db.favorite.find({ "user": ObjectId(query.userId) }).populate('user').populate('product');
     log.end();
-    return carts;
+    return favProducts;
 };
 
 
@@ -106,17 +132,23 @@ const getCarts = async (query, context) => {
 
 // };
 
-const deleteProduct = async (id, context) => {
-    const log = context.logger.start(`services:assignLeads:deletePotentialCustomer`);
-
-    let isProductExists = await db.products.findById(id);
-    await db.products.remove({ '_id': id });
-    log.end();
-    return isProductExists
+const deleteItem = async (id, context) => {
+    const log = context.logger.start(`services:carts:deleteItem`);
+    let isCartExists = await db.cart.findById(id);
+    if(isCartExists){
+        const removeItem = await db.cart.remove({ '_id': id });
+        log.end();
+        return removeItem
+    }else{
+        log.end();
+        throw new Error("Cart item not found");
+    }
+    
 };
 
 
 exports.create = create;
 exports.getCarts = getCarts;
-exports.deleteProduct = deleteProduct;
+exports.deleteItem = deleteItem;
 exports.addToFav = addToFav;
+exports.getFav = getFav;

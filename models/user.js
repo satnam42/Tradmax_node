@@ -17,10 +17,7 @@ const user = mongoose.Schema({
         default: "active",
         enum: ["active", "inactive"]
     },
-    image: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'image',
-    },
+    image: { type: String, default: "" },
     /* correct method for saving coordinates in mongodb */
     // loc: {
     //     type: { type: String, default: "Point" , required: true,},
