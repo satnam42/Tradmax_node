@@ -277,12 +277,12 @@ const configure = (app, logger) => {
         api.products.create
     );
 
-    // app.put(
-    //     "/api/products/uploadImage/:id",
-    //     permit.context.builder, 
-    //     // upload.single('image'),
-    //     api.products.uploadProductImage
-    // );
+    app.get(
+        "/api/products/getAllProducts",
+        permit.context.builder,
+        // validator.users.create, 
+        api.products.getAllProducts
+    );
 
     app.get(
         "/api/products/productsBySubCategories",
@@ -291,11 +291,24 @@ const configure = (app, logger) => {
         api.products.productsBySubCategories
     );
 
+    app.get(
+        "/api/products/similarProducts",
+        permit.context.builder,
+        // validator.users.create, 
+        api.products.similarProducts
+    );
+
     app.put(
         '/api/products/uploadProductFiles/:id',
         permit.context.builder,
         // validator.products.upload,
         api.products.uploadProductFiles
+    );
+
+    app.post(
+        "/api/products/filterProducts",
+        permit.context.builder,
+        api.products.filterProducts
     );
 
     /* Cart Section */

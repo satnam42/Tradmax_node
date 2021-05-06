@@ -53,21 +53,46 @@ const productsBySubCategories = async (req, res) => {
     }
 };
 
-// const search = async (req, res) => {
-//     const log = req.context.logger.start(`api:products:productList`);
-//     try {
-//         const products = await service.search(req.query, req.context);
-//         log.end();
-//         return response.data(
-//             res,
-//             mapper.toSearchModel(products),
-//         );
-//     } catch (err) {
-//         log.error(err);
-//         log.end();
-//         return response.failure(res, err.message);
-//     }
-// };
+const similarProducts = async (req, res) => {
+    const log = req.context.logger.start(`api:products:similarProducts`);
+    try {
+        const products = await service.similarProducts(req.query, req.context);
+        let message = "Similar Products Fetched Successfully";
+        log.end();
+        return response.page(message,res, products, Number(req.query.pageNo) || 1, Number(req.query.pageSize) || 10, products.count)
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
+const getAllProducts = async (req, res) => {
+    const log = req.context.logger.start(`api:products:getAllProducts`);
+    try {
+        const products = await service.getAllProducts(req.query, req.context);
+        let message = "Products Fetched Successfully";
+        log.end();
+        return response.page(message,res, products, Number(req.query.pageNo) || 1, Number(req.query.pageSize) || 10, products.count)
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
+const filterProducts = async (req, res) => {
+    const log = req.context.logger.start(`api:products:productList`);
+    try {
+        const products = await service.filterProducts(req.query, req.context);
+        log.end();
+        return response.data(res, products);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
 
 // const update = async (req, res) => {
 //     const log = req.context.logger.start(`api:products:update:${req.params.id}`);
@@ -98,20 +123,6 @@ const productsBySubCategories = async (req, res) => {
 //     }
 // };
 
-// const uploadProductImage = async (req, res) => {
-
-//     const log = req.context.logger.start(`api:product:ImageUplaod`);
-//     try {
-//         const product = await service.uploadProductImage(req.params.id, req.file, req.context);
-//         const message = " Picture Uploaded Successfully";
-//         log.end();
-//         return response.success(res, message, product);
-//     } catch (err) {
-//         log.error(err);
-//         log.end();
-//         return response.failure(res, err.message);
-//     }
-// };
 
 const uploadProductFiles = async (req, res) => {
     const log = req.context.logger.start(`api:products:uploadProductFiles`);
@@ -128,13 +139,8 @@ const uploadProductFiles = async (req, res) => {
 
 exports.create = create;
 exports.uploadProductFiles = uploadProductFiles;
-// exports.update = update;
-// exports.getById = getById;
+exports.filterProducts = filterProducts;
+exports.getAllProducts = getAllProducts;
 exports.productsBySubCategories = productsBySubCategories;
-// exports.search = search
-// exports.asignVendor = asignVendor
-// exports.productsByVendor = productsByVendor
-// exports.uploadProductImage = uploadProductImage
-// exports.addQuantity = addQuantity
-// exports.uploadPdf = uploadPdf
+exports.similarProducts = similarProducts
 // exports.deleteProduct = deleteProduct

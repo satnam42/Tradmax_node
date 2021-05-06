@@ -61,41 +61,6 @@ const create = async (model, context) => {
     return products;
 };
 
-// const uploadProductImage = async (id, file, context) => {
-
-//     const log = context.logger.start(`services:products:uploadProductImage`);
-//     let property = await db.product.findById(id);
-//     if (!files) {
-//         throw new Error("image not found");
-//     }
-//     if (!property) {
-//         throw new Error("product not found!!");
-//     }
-//     if(!property.productImages){
-//         const uploadfile = []
-//         for(let file of files){
-//             const avatar = imageUrl + 'assets/images/' + file.filename
-//             let fileType = file.mimetype.split('/')[0]
-//             uploadfile.push({ url : avatar, type: fileType})
-//         }
-//         property.productImages = uploadfile
-//         await property.save();
-//         log.end();
-//         return property
-//     }else{
-//         for(let file of files){
-//             const avatar = imageUrl + 'assets/images/' + file.filename
-//             let fileType = file.mimetype.split('/')[0]
-//             property.productImages =  property.productImages.concat({ url : avatar, type: fileType})
-//         }
-//         await property.save();
-//         log.end();
-//         return property
-//     }
-
-
-// };
-
 
 // const getById = async (id, context) => {
 //     const log = context.logger.start(`services:products:getById:${id}`);
@@ -106,15 +71,34 @@ const create = async (model, context) => {
 
 
 const productsBySubCategories = async (query, context) => {
-        const log = context.logger.start(`services:productsBySubCategories:get`);
-        let pageNo = Number(query.pageNo) || 1;
-        let pageSize = Number(query.pageSize) || 10;
-        let skipCount = pageSize * (pageNo - 1);
-        const products = await db.product.find({ "subCategory.id": query.subCategoryId }).skip(skipCount).limit(pageSize);
-        log.end();
-        return products;
-    };
+    const log = context.logger.start(`services:productsBySubCategories:get`);
+    let pageNo = Number(query.pageNo) || 1;
+    let pageSize = Number(query.pageSize) || 10;
+    let skipCount = pageSize * (pageNo - 1);
+    const products = await db.product.find({ "subCategory.id": query.subCategoryId }).skip(skipCount).limit(pageSize);
+    log.end();
+    return products;
+};
 
+const getAllProducts = async (query, context) => {
+    const log = context.logger.start(`services:getAllProducts:get`);
+    let pageNo = Number(query.pageNo) || 1;
+    let pageSize = Number(query.pageSize) || 10;
+    let skipCount = pageSize * (pageNo - 1);
+    const products = await db.product.find().skip(skipCount).limit(pageSize);
+    log.end();
+    return products;
+};
+
+const similarProducts = async (query, context) => {
+    const log = context.logger.start(`services:similarProducts:get`);
+    let pageNo = Number(query.pageNo) || 1;
+    let pageSize = Number(query.pageSize) || 10;
+    let skipCount = pageSize * (pageNo - 1);
+    const products = await db.product.find({ "subCategory.id": query.subCategoryId }).skip(skipCount).limit(pageSize);
+    log.end();
+    return products;
+};
 
 // const update = async (id, model, context) => {
 //     const log = context.logger.start(`services:products:update`);
@@ -173,11 +157,26 @@ const uploadProductFiles = async(id, files,model, context) => {
 
 };
 
+const filterProducts = async(query, context) => {
+    const log = context.logger.start(`services:products:filterProducts`);
+    let allProducts = await db.product.aggregate([
+        // { 
+        //     "$match": {
+        //         // price : { $gte :  Number(minPrice), $lte : Number(maxPrice)},
+        //         subCategory.name : { $eq: name },
+        //         // bedrooms : { $gte :  Number(minBedrooms), $lte : Number(maxBedrooms)},
+        //         // status: { $eq: 'active' }
+        //     }
+        //  }
+    ])
+    log.end();
+    return allProducts;
+};
+
 exports.create = create;
 exports.uploadProductFiles = uploadProductFiles;
-// exports.update = update;
-// exports.getById = getById;
+exports.getAllProducts = getAllProducts;
+exports.filterProducts = filterProducts;
 exports.productsBySubCategories = productsBySubCategories;
-// exports.uploadProductImage = uploadProductImage;
-// exports.addQuantity = addQuantity;
+exports.similarProducts = similarProducts;
 // exports.deleteProduct = deleteProduct;

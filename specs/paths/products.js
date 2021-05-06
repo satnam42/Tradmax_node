@@ -175,34 +175,82 @@ module.exports = [
             }
         }
     },
-    // {
-    //     url: "/uploadProductImage/{id}",
-    //     put: {
-    //         summary: "Upload Product Files",
-    //         description: "Upload Property Files ",
-    //         parameters: [{ in: "formData",
-    //                 name: "files[]",
-    //                 type: "file",
-    //                 description: "The file to upload.",
-    //                 required: true,
-    //             },
-    //             { in: "path",
-    //                 type: "string",
-    //                 name: "id",
-    //                 description: "Product Id",
-    //                 required: true
-    //             }
-    //         ],
-    //         responses: {
-    //             default: {
-    //                 description: "Unexpected error",
-    //                 schema: {
-    //                     $ref: "#/definitions/Error"
-    //                 }
-    //             }
-    //         }
-    //     }
-    // },
+    {
+        url: "/similarProducts",
+        get: {
+            summary: "Similar Products API",
+            description: "product  by SUbcategories",
+            parameters: [
+                // {
+                //     in: "query",
+                //     type: "integer",
+                //     name: "pageNo",
+                //     description: "pageNo",
+                //     required: true
+                // },
+                // {
+                //     in: "query",
+                //     type: "integer",
+                //     name: "pageSize",
+                //     description: "pageSize",
+                //     required: true
+                // },
+                {
+                    in: "query",
+                    type: "string",
+                    name: "subCategoryId",
+                    description: "pass subcat ID here",
+                    required: true
+                },
+                {
+                    in: "query",
+                    type: "string",
+                    name: "productId",
+                    description: "pass productId here",
+                    required: true
+                },
+            ],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
+        url: "/getAllProducts",
+        get: {
+            summary: "Homelisting API",
+            description: "product  by SUbcategories",
+            parameters: [
+                {
+                    in: "query",
+                    type: "integer",
+                    name: "pageNo",
+                    description: "pageNo",
+                    required: true
+                },
+                {
+                    in: "query",
+                    type: "integer",
+                    name: "pageSize",
+                    description: "pageSize",
+                    required: true
+                },
+            ],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
     {
         url: "/uploadProductFiles/{id}",
         put: {
@@ -231,69 +279,29 @@ module.exports = [
             }
         }
     },
-    // {
-    //     url: "/uploadImage/{id}",
-    //     put: {
-    //         summary: "upload product image ",
-    //         description: "upload product image ",
-    //         parameters: [
-    //             {
-    //                 in: "formData",
-    //                 name: "image",
-    //                 type: "file",
-    //                 description: "The file to upload.",
-    //                 required: true,
-    //             },
-    //             {
-    //                 in: "path",
-    //                 name: "id",
-    //                 description: "product id",
-    //                 required: true,
-    //                 type: "string"
-    //             },
-    //         ],
-    //         responses: {
-    //             default: {
-    //                 description: "Unexpected error",
-    //                 schema: {
-    //                     $ref: "#/definitions/Error"
-    //                 }
-    //             }
-    //         }
-    //     }
-    // },
-    // {
-    //     url: "/addQuantity/{id}",
-    //     put: {
-    //         summary: "add Quantity ",
-    //         description: "add product Quantity",
-    //         parameters: [
-    //             {
-    //                 in: "path",
-    //                 name: "id",
-    //                 description: "product id",
-    //                 required: true,
-    //                 type: "string"
-    //             },
-    //             {
-    //                 in: "query",
-    //                 name: "quantity",
-    //                 description: "add product quantity",
-    //                 required: true,
-    //                 type: "string"
-    //             },
-
-    //         ],
-    //         responses: {
-    //             default: {
-    //                 description: "Unexpected error",
-    //                 schema: {
-    //                     $ref: "#/definitions/Error"
-    //                 }
-    //             }
-    //         }
-    //     }
-    // },
+    {
+        url: '/filterProducts',
+        post: {
+            summary: 'filter Products',
+            description: 'filter by property name',
+            parameters: [{ in: 'body',
+                name: 'body',
+                description: 'Model of search property by name',
+                required: true,
+                schema: {
+                    $ref: '#/definitions/searchProducts'
+                }
+            }],
+            responses: {
+                default: {
+                    description: 'Unexpected error',
+                    schema: {
+                        $ref: '#/definitions/Error'
+                    }
+                }
+            }
+        }
+    },
     {
         url: "/update/{id}",
         put: {
