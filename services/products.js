@@ -61,40 +61,40 @@ const create = async (model, context) => {
     return products;
 };
 
-const uploadProductImage = async (id, file, context) => {
+// const uploadProductImage = async (id, file, context) => {
 
-    const log = context.logger.start(`services:products:uploadProductImage`);
-    let property = await db.product.findById(id);
-    if (!files) {
-        throw new Error("image not found");
-    }
-    if (!property) {
-        throw new Error("product not found!!");
-    }
-    if(!property.productImages){
-        const uploadfile = []
-        for(let file of files){
-            const avatar = imageUrl + 'assets/images/' + file.filename
-            let fileType = file.mimetype.split('/')[0]
-            uploadfile.push({ url : avatar, type: fileType})
-        }
-        property.productImages = uploadfile
-        await property.save();
-        log.end();
-        return property
-    }else{
-        for(let file of files){
-            const avatar = imageUrl + 'assets/images/' + file.filename
-            let fileType = file.mimetype.split('/')[0]
-            property.productImages =  property.productImages.concat({ url : avatar, type: fileType})
-        }
-        await property.save();
-        log.end();
-        return property
-    }
+//     const log = context.logger.start(`services:products:uploadProductImage`);
+//     let property = await db.product.findById(id);
+//     if (!files) {
+//         throw new Error("image not found");
+//     }
+//     if (!property) {
+//         throw new Error("product not found!!");
+//     }
+//     if(!property.productImages){
+//         const uploadfile = []
+//         for(let file of files){
+//             const avatar = imageUrl + 'assets/images/' + file.filename
+//             let fileType = file.mimetype.split('/')[0]
+//             uploadfile.push({ url : avatar, type: fileType})
+//         }
+//         property.productImages = uploadfile
+//         await property.save();
+//         log.end();
+//         return property
+//     }else{
+//         for(let file of files){
+//             const avatar = imageUrl + 'assets/images/' + file.filename
+//             let fileType = file.mimetype.split('/')[0]
+//             property.productImages =  property.productImages.concat({ url : avatar, type: fileType})
+//         }
+//         await property.save();
+//         log.end();
+//         return property
+//     }
 
 
-};
+// };
 
 
 // const getById = async (id, context) => {
@@ -104,77 +104,6 @@ const uploadProductImage = async (id, file, context) => {
 //     return products;
 // };
 
-
-// const productList = async (query, context) => {
-//     const log = context.logger.start(`services:products:get`);
-//     let pageNo = Number(query.pageNo) || 1;
-//     let pageSize = Number(query.pageSize) || 10;
-//     let skipCount = pageSize * (pageNo - 1);
-//     let products
-//     if (query.role == "customer") {
-//         if (query.storeId === '' || query.storeId === "string" || query.storeId === undefined) {
-//             throw new Error('Store id is required')
-//         }
-//         if (query.excludeCustomerGroup === 'true') {
-//             products = await db.products
-//                 .find({
-//                     // 'category.id': { $ne: query.customerGroup },
-//                     assignedVendors: { $elemMatch: { storeId: query.storeId } }
-//                 })
-//                 .skip(skipCount)
-//                 .limit(pageSize);
-//             products.count = await db.products.find({
-//                 'category.id':
-//                     { $ne: query.customerGroup },
-//                 assignedVendors: { $elemMatch: { storeId: query.storeId } }
-//             }).countDocuments();
-
-//         } else if (query.customerGroup) {
-//             let suggestedProducts = await db.order.find({
-//                 userId: query.userId
-//             }).sort({ _id: -1 }).limit(1)
-
-//             products = await db.products
-//                 .find({
-//                     'category.id': query.customerGroup,
-//                     assignedVendors: { $elemMatch: { storeId: query.storeId } }
-//                 }).sort({ name: 1 })
-//             // .skip(skipCount)
-//             // .limit(pageSize);
-
-//             if (suggestedProducts.length) {
-//                 products.forEach((productItem, index) => {
-//                     suggestedProducts[0].products.forEach(suggestedProductItem => {
-//                         if (ObjectId(productItem.id).equals(suggestedProductItem.id)) {
-//                             products.splice(index, 1);
-//                             products.splice(0, 0, productItem);
-//                         }
-//                     })
-//                 })
-//             }
-//             products.splice(pageSize, products.length);
-//             products.count = await db.products.find({ 'category.id': query.customerGroup, assignedVendors: { $elemMatch: { storeId: query.storeId } } }).countDocuments();
-//         } else {
-//             {
-//                 products = await db.products
-//                     .find({ assignedVendors: { $elemMatch: { storeId: query.storeId } } })
-//                     .skip(skipCount)
-//                     .limit(pageSize);
-//                 products.count = await db.products.find({ assignedVendors: { $elemMatch: { storeId: query.storeId } } }).countDocuments();
-//             }
-
-//         }
-//     } else {
-//         products = await db.products
-//             .find({})
-//             .skip(skipCount)
-//             .limit(pageSize);
-//         products.count = await db.products.find({}).countDocuments();
-//     }
-
-//     log.end();
-//     return products;
-// };
 
 const productsBySubCategories = async (query, context) => {
         const log = context.logger.start(`services:productsBySubCategories:get`);
@@ -211,16 +140,44 @@ const productsBySubCategories = async (query, context) => {
 //     return isProductExists
 // };
 
+const uploadProductFiles = async(id, files,model, context) => {
+    const log = context.logger.start(`services:products:uploadProductFiles`);
+    let product = await db.product.findById(id);
+    if (!files) {
+        throw new Error("image not found");
+    }
+    if (!product) {
+        throw new Error("product not found!!");
+    }
+    if(!product.productFiles){
+        const uploadfile = []
+        for(let file of files){
+            const avatar = imageUrl + 'assets/images/' + file.filename
+            let fileType = file.mimetype.split('/')[0]
+            uploadfile.push({ url : avatar, type: fileType})
+        }
+        product.productFiles = uploadfile
+        await product.save();
+        log.end();
+        return product
+    }else{
+        for(let file of files){
+            const avatar = imageUrl + 'assets/images/' + file.filename
+            let fileType = file.mimetype.split('/')[0]
+            product.productFiles =  product.productFiles.concat({ url : avatar, type: fileType})
+        }
+        await product.save();
+        log.end();
+        return product
+    }
+
+};
 
 exports.create = create;
-// exports.productList = productList;
+exports.uploadProductFiles = uploadProductFiles;
 // exports.update = update;
 // exports.getById = getById;
 exports.productsBySubCategories = productsBySubCategories;
-// exports.search = search;
-// exports.asignVendor = asignVendor;
-// exports.productsByVendor = productsByVendor;
-exports.uploadProductImage = uploadProductImage;
+// exports.uploadProductImage = uploadProductImage;
 // exports.addQuantity = addQuantity;
-// exports.uploadPdf = uploadPdf;
 // exports.deleteProduct = deleteProduct;

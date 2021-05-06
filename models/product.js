@@ -26,6 +26,10 @@ const product = mongoose.Schema({
     description: { type: String, required: true },
     // price: { type: String, required: true },
     image: { type: String },
+    productFiles: [{
+        url : {type: String, default: ""},
+        type: {type: String, default: ""} 
+    }],
     createdOn: { type: Date, default: Date.now },
     updatedOn: { type: Date, default: Date.now }
 });

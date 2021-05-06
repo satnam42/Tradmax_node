@@ -175,11 +175,39 @@ module.exports = [
             }
         }
     },
+    // {
+    //     url: "/uploadProductImage/{id}",
+    //     put: {
+    //         summary: "Upload Product Files",
+    //         description: "Upload Property Files ",
+    //         parameters: [{ in: "formData",
+    //                 name: "files[]",
+    //                 type: "file",
+    //                 description: "The file to upload.",
+    //                 required: true,
+    //             },
+    //             { in: "path",
+    //                 type: "string",
+    //                 name: "id",
+    //                 description: "Product Id",
+    //                 required: true
+    //             }
+    //         ],
+    //         responses: {
+    //             default: {
+    //                 description: "Unexpected error",
+    //                 schema: {
+    //                     $ref: "#/definitions/Error"
+    //                 }
+    //             }
+    //         }
+    //     }
+    // },
     {
-        url: "/uploadProductImage/{id}",
+        url: "/uploadProductFiles/{id}",
         put: {
-            summary: "Upload Product Files",
-            description: "Upload Property Files ",
+            summary: "Upload product Files",
+            description: "Upload product Files ",
             parameters: [{ in: "formData",
                     name: "files[]",
                     type: "file",
@@ -189,7 +217,7 @@ module.exports = [
                 { in: "path",
                     type: "string",
                     name: "id",
-                    description: "Product Id",
+                    description: "product Id",
                     required: true
                 }
             ],

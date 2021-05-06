@@ -98,14 +98,27 @@ const productsBySubCategories = async (req, res) => {
 //     }
 // };
 
-const uploadProductImage = async (req, res) => {
+// const uploadProductImage = async (req, res) => {
 
-    const log = req.context.logger.start(`api:product:ImageUplaod`);
+//     const log = req.context.logger.start(`api:product:ImageUplaod`);
+//     try {
+//         const product = await service.uploadProductImage(req.params.id, req.file, req.context);
+//         const message = " Picture Uploaded Successfully";
+//         log.end();
+//         return response.success(res, message, product);
+//     } catch (err) {
+//         log.error(err);
+//         log.end();
+//         return response.failure(res, err.message);
+//     }
+// };
+
+const uploadProductFiles = async (req, res) => {
+    const log = req.context.logger.start(`api:products:uploadProductFiles`);
     try {
-        const product = await service.uploadProductImage(req.params.id, req.file, req.context);
-        const message = " Picture Uploaded Successfully";
+        const url = await service.uploadProductFiles(req.params.id, req.files, req.body, req.context);
         log.end();
-        return response.success(res, message, product);
+        return response.data(res, url);
     } catch (err) {
         log.error(err);
         log.end();
@@ -114,14 +127,14 @@ const uploadProductImage = async (req, res) => {
 };
 
 exports.create = create;
-// exports.productList = productList;
+exports.uploadProductFiles = uploadProductFiles;
 // exports.update = update;
 // exports.getById = getById;
 exports.productsBySubCategories = productsBySubCategories;
 // exports.search = search
 // exports.asignVendor = asignVendor
 // exports.productsByVendor = productsByVendor
-exports.uploadProductImage = uploadProductImage
+// exports.uploadProductImage = uploadProductImage
 // exports.addQuantity = addQuantity
 // exports.uploadPdf = uploadPdf
 // exports.deleteProduct = deleteProduct

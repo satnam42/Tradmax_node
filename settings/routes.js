@@ -194,55 +194,55 @@ const configure = (app, logger) => {
 
     //// images  ////
 
-    app.post(
-        '/api/images/uploadSingle',
-        permit.context.builder,
-        validator.images.upload,
-        api.images.uploadSingle
-    );
+    // app.post(
+    //     '/api/images/uploadSingle',
+    //     permit.context.builder,
+    //     validator.images.upload,
+    //     api.images.uploadSingle
+    // );
 
-    app.post(
-        '/api/images/uploadMultiple',
-        permit.context.builder,
-        validator.images.upload,
-        api.images.uploadMultiple
-    );
+    // app.post(
+    //     '/api/images/uploadMultiple',
+    //     permit.context.builder,
+    //     validator.images.upload,
+    //     api.images.uploadMultiple
+    // );
 
-    app.put(
-        '/api/images/remove',
-        permit.context.builder,
-        api.images.remove
-    );
+    // app.put(
+    //     '/api/images/remove',
+    //     permit.context.builder,
+    //     api.images.remove
+    // );
 
     ///////////////event api's /////////////////
 
-    app.post(
-        "/api/events/add",
-        permit.context.builder,
-        api.events.create
-    );
+    // app.post(
+    //     "/api/events/add",
+    //     permit.context.builder,
+    //     api.events.create
+    // );
 
-    app.get(
-        "/api/events/listByUserId/:id",
-        permit.context.builder,
-        api.events.listByUserId
-    );
-    app.get(
-        "/api/events/list",
-        permit.context.builder,
-        api.events.list
-    );
-    app.put(
-        "/api/events/update/:id",
-        permit.context.builder,
-        api.events.update
-    );
+    // app.get(
+    //     "/api/events/listByUserId/:id",
+    //     permit.context.builder,
+    //     api.events.listByUserId
+    // );
+    // app.get(
+    //     "/api/events/list",
+    //     permit.context.builder,
+    //     api.events.list
+    // );
+    // app.put(
+    //     "/api/events/update/:id",
+    //     permit.context.builder,
+    //     api.events.update
+    // );
 
-    app.delete(
-        "/api/events/delete/:id",
-        permit.context.builder,
-        api.events.remove
-    );
+    // app.delete(
+    //     "/api/events/delete/:id",
+    //     permit.context.builder,
+    //     api.events.remove
+    // );
     
     /* Category Section */
     app.post(
@@ -277,18 +277,25 @@ const configure = (app, logger) => {
         api.products.create
     );
 
-    app.put(
-        "/api/products/uploadImage/:id",
-        permit.context.builder, 
-        // upload.single('image'),
-        api.products.uploadProductImage
-    );
+    // app.put(
+    //     "/api/products/uploadImage/:id",
+    //     permit.context.builder, 
+    //     // upload.single('image'),
+    //     api.products.uploadProductImage
+    // );
 
     app.get(
         "/api/products/productsBySubCategories",
         permit.context.builder,
         // validator.users.create, 
         api.products.productsBySubCategories
+    );
+
+    app.put(
+        '/api/products/uploadProductFiles/:id',
+        permit.context.builder,
+        // validator.products.upload,
+        api.products.uploadProductFiles
     );
 
     /* Cart Section */
