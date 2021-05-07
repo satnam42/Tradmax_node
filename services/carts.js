@@ -25,6 +25,42 @@ const ObjectId = require("mongodb").ObjectID;
 //     return products;
 // };
 
+const updateAddress = (model, address, context) => {
+    const log = context.logger.start("services:carts:updateAddress");
+    if (model.fullName !== "string" && model.fullName !== undefined) {
+        address.fullName = model.fullName;
+    }
+
+    if (model.address !== "string" && model.address !== undefined) {
+        address.address = model.address;
+    }
+
+    if (model.city !== "string" && model.city !== undefined) {
+        address.city = model.city;
+    }
+
+    if (model.state !== "string" && model.state !== undefined) {
+        address.state = model.state;
+    }
+
+    if (model.country !== "string" && model.country !== undefined) {
+        address.country = model.country;
+    }
+
+    if (model.zipCode !== "string" && model.zipCode !== undefined) {
+        address.zipCode = model.zipCode;
+    }
+
+    if (model.country !== "string" && model.country !== undefined) {
+        address.country = model.country;
+    }
+
+    log.end();
+    address.save();
+    return address;
+
+};
+
 const build = async (model, context) => {
     const { userId, productId, quantity, total, variation, status } = model;
     const log = context.logger.start(`services:carts:build${model}`);
@@ -66,7 +102,7 @@ const create = async (model, context) => {
 };
 
 const getCarts = async (query, context) => {
-    const log = context.logger.start(`services:getCarts:get`);
+    const log = context.logger.start(`services:carts:getCarts`);
     const carts = await db.cart.find({ "user": ObjectId(query.userId) }).populate('user').populate('product');
     log.end();
     return carts;
@@ -146,9 +182,53 @@ const deleteItem = async (id, context) => {
     
 };
 
+const addAddress = async (model, context) => {
+    const log = context.logger.start("services:carts:addAddress");
+    if(!model.addressId){
+        const { fullName, address, city, state, zipCode, country } = model;
+        // const log = context.logger.start(`services:carts:build${model}`);
+        let addressModel = {
+            fullName: fullName,
+            address: address,
+            city: city,
+            state: state,
+            zipCode: zipCode,
+            country: country,
+            createdOn: new Date(),
+            updatedOn: new Date()
+        }
+        const saveAddress = await new db.address(addressModel).save();
+        log.end();
+        return saveAddress;
+    }else{
+        const entity = await db.address.findById(model.addressId)
+        if (!entity) {
+            throw new Error("invalid ID");
+        }
+        const updated = await updateAddress(model, entity, context);
+        log.end();
+        return updated
+    }
+};
+
+const getAddress = async (body,context) => {
+    const log = context.logger.start(`services:carts:getAddress`);
+    if(body.addressId){
+        const address = await db.address.find({ _id: body.addressId });
+        log.end();
+        return address;
+    }else{
+        const address = await db.address.find();
+        log.end();
+        return address;
+    }
+};
+
 
 exports.create = create;
 exports.getCarts = getCarts;
 exports.deleteItem = deleteItem;
 exports.addToFav = addToFav;
 exports.getFav = getFav;
+exports.addAddress = addAddress;
+exports.getAddress = getAddress;

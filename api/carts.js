@@ -1,3 +1,4 @@
+/* exported mapper */
 "use strict";
 const service = require("../services/carts");
 const response = require("../exchange/response");
@@ -104,9 +105,38 @@ const deleteItem = async (req, res) => {
     }
 };
 
+const addAddress = async (req, res) => {
+    const log = req.context.logger.start(`api:carts:addToFav`);
+    try {
+        const addAddress = await service.addAddress(req.body, req.context);
+        const message = "Address Added Successfully!!";
+        log.end();
+        return response.success(res, message, addAddress);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
+const getAddress = async (req, res) => {
+    const log = req.context.logger.start(`api:carts:getAddress`);
+    try {
+        const address = await service.getAddress(req.body, req.context);
+        log.end();
+        return response.data(res, address);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
 
 exports.create = create;
 exports.getCarts = getCarts;
 exports.addToFav = addToFav
 exports.getFav = getFav
 exports.deleteItem = deleteItem
+exports.addAddress = addAddress
+exports.getAddress = getAddress

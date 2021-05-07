@@ -193,6 +193,54 @@ module.exports = [{
                 }
             }
         }
-    }
-
+    },
+    {
+        url: "/addAddress",
+        post: {
+            summary: "addAddress",
+            description: "add and update Address",
+            parameters: [
+                {
+                    in: "body",
+                    name: "body",
+                    description: "Place address ID in case of update address(optional)",
+                    required: true,
+                    schema: {
+                        $ref: "#/definitions/addAddress"
+                    }
+                }
+            ],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
+        url: "/getAddress",
+        post: {
+            summary: "Get Address",
+            description: "Get Address",
+            parameters: [{ in: "body",
+                name: "body",
+                description: "Pass Address Id here to get Single Address",
+                required: false,
+                schema: {
+                    $ref: "#/definitions/getAddress"
+                }
+            }],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
 ];

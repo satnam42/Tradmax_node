@@ -26,6 +26,7 @@ const configure = (app, logger) => {
         res.contentType("application/json");
         res.send(specs.get());
     });
+
     ////react js project setup////
     // const root = path.join(__dirname, '../../startupbundle_bin_reactjs/', 'build')
 
@@ -145,45 +146,6 @@ const configure = (app, logger) => {
         api.roles.deleteRole
     );
 
-    // //admins api's //
-    // app.post(
-    //     "/api/admins/create",
-    //     permit.context.builder,
-    //     validator.admins.create,
-    //     api.admins.create
-    // );
-
-    // app.post(
-    //     "/api/admins/login",
-    //     permit.context.builder,
-    //     validator.admins.login,
-    //     api.admins.login
-    // );
-
-    // app.put(
-    //     "/api/admins/changePassword/:id",
-    //     permit.context.validateToken,
-    //     validator.admins.changePassword,
-    //     api.admins.changePassword,
-    // );
-    // app.put(
-    //     "/api/admins/update/:id",
-    //     permit.context.validateToken,
-    //     api.admins.update,
-    // );
-
-    // app.get(
-    //     "/api/admins/getAdmins",
-    //     permit.context.validateToken,
-    //     api.admins.getAdmins
-    // );
-
-    // app.delete(
-    //     "/api/admins/delete/:id",
-    //     permit.context.validateToken,
-    //     api.admins.deleteAdmin
-    // );
-
     //// consversations api's ////
 
     app.get(
@@ -245,6 +207,7 @@ const configure = (app, logger) => {
     // );
     
     /* Category Section */
+
     app.post(
         "/api/categories/createCategory",
         permit.context.builder,
@@ -342,6 +305,27 @@ const configure = (app, logger) => {
         permit.context.builder,
         api.carts.deleteItem
     );
+
+    app.post(
+        "/api/carts/addAddress",
+        permit.context.builder,
+        api.carts.addAddress
+    );
+
+    app.post(
+        "/api/carts/getAddress",
+        permit.context.builder,
+        api.carts.getAddress
+    );
+
+    /* Orders Section */
+    
+    app.post(
+        "/api/orders/placeOrder",
+        permit.context.builder,
+        api.orders.placeOrder
+    );
+    
 
     ///////////////notifications api's /////////////////
     // app.get(

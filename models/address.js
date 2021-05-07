@@ -1,7 +1,8 @@
 "use strict";
 const mongoose = require("mongoose");
 const address = mongoose.Schema({
-    fullAddres: { type: String, default: "" },
+    fullName: { type: String, default: "" },
+    address: { type: String, default: "" },
     city: { type: String, default: "" },
     country: { type: String, default: "" },
     state: { type: String, default: "" },
