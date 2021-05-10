@@ -264,12 +264,12 @@ const sendOtp = async(user, context) => {
 
 }
 
-const otpVerifyAndChangePassword = async(model, context) => {
+const otpVerifyAndChangePassword = async(model, token, context) => {
     const log = context.logger.start('services/users/otpVerified')
     const otpDetail = await auth.extractToken(token, context)
 
     if (otpDetail.otp !== undefined && otpDetail.otp != model.otp) {
-        throw new Error("please enter valid otp");;
+        throw new Error("please enter valid otp");
     }
     if (otpDetail.otp.name === "TokenExpiredError") {
         throw new Error("otp expired");
@@ -282,13 +282,7 @@ const otpVerifyAndChangePassword = async(model, context) => {
     if (!user) {
         throw new Error("user not found");
     }
-
-    // const newPassword = encrypt.getHash(model.newPassword, context);
-    // user.password = newPassword;
-    // user.updatedOn = new Date();
-    // await user.save();
     log.end();
-
     return;
 }
 

@@ -1,48 +1,56 @@
 const ObjectId = require("mongodb").ObjectID;
 
 const Orderbuild = async (model, context) => {
-    const { userId, productId, quantity, total, variation, status } = model;
-    const log = context.logger.start(`services:carts:build${model}`);
-    let productModel = {
+    const { userId, totalAmount, cart, addressId, status, tax } = model;
+    const log = context.logger.start(`services:orders:build${model}`);
+    let orderModel = {
         user: userId,
-        product: productId,
-        quantity: quantity,
-        total: total,
+        totalAmount: totalAmount,
+        tax: tax,
         status: status,
-        variation: variation,
+        cart: cart,
+        address: addressId,
         createdOn: new Date(),
         updatedOn: new Date()
     }
-    const carts = await new db.cart(productModel).save();
+    const order = await new db.order(orderModel).save();
     log.end();
-    return carts;
+    return order;
 };
 
 const placeOrder = async (model, context) => {
     const log = context.logger.start("services:orders:placeOrder");
-    const isProductExists = await db.product.findById(model.
-        productId)
-    if(!isProductExists){
-        throw new Error("product not found");
+    let user = await db.user.find({ _id: model.userId });
+    if (!user) {
+        throw new Error("user not found");
     }else{
-        const checkcart = await db.cart.findOne({ 
-            user: { $eq: ObjectId(model.userId) }, 
-            product: { $eq: ObjectId(model.productId) },
-            variation: { $eq: model.variation } 
-        });
-        if(!checkcart){
-            const cart = Orderbuild(model, context);
+        // const checkcart = await db.cart.findOne({ 
+        //     user: { $eq: ObjectId(model.userId) }, 
+        //     product: { $eq: ObjectId(model.productId) },
+        //     variation: { $eq: model.variation } 
+        // });
+        // if(!checkcart){
+            const order = Orderbuild(model, context);
             log.end();
-            return cart;
-        }else{
-            throw new Error("product already in cart");
-        }
+            return order;
+        // }else{
+        //     throw new Error("product already in cart");
+        // }
     }
 };
 
 const getOrder = async (query, context) => {
     const log = context.logger.start(`services:orders:getOrder`);
-    const carts = await db.cart.find({ "user": ObjectId(query.userId) }).populate('user').populate('product');
+    const carts = await db.order.find({ "user": ObjectId(query.userId) })
+    .populate('user')
+    .populate('address')
+    .populate({
+        path: 'cart.cartId',
+        model: 'cart',
+        populate : {
+            path : 'product'
+        },
+    })
     log.end();
     return carts;
 };

@@ -1,21 +1,32 @@
 "use strict";
 const mongoose = require("mongoose");
 const order = mongoose.Schema({
-    orderID: { type: String, required: true },
+    orderID: { type: String, required: false },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
         required: true
     },
-    cart: {
-        cartIds: [
+    // cart: {
+    //     cartIds: [
+    //         {
+    //             type: mongoose.Schema.Types.ObjectId,
+    //             ref: 'cart',
+    //             required: true
+    //         }
+    //     ]
+    // },
+    // cart: {
+        cart: [
             {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'cart',
-                required: true
-            }
-        ]
-    },
+                cartId: { 
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'user',
+                    required: true 
+                },
+            },
+        ],
+    // },
     address: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'address',
