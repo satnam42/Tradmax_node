@@ -3,7 +3,10 @@ const ObjectId = require("mongodb").ObjectID;
 const Orderbuild = async (model, context) => {
     const { userId, totalAmount, cart, addressId, status, tax } = model;
     const log = context.logger.start(`services:orders:build${model}`);
+    let r = Math.floor(Math.random() * 10000000000) + 1;
+    // console.log("random", r);
     let orderModel = {
+        orderID: r,
         user: userId,
         totalAmount: totalAmount,
         tax: tax,

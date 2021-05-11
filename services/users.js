@@ -149,7 +149,7 @@ const changePassword = async(id, model, context) => {
     if (!id) {
         throw new Error("user id is required");
     }
-    let user = await db.user.findById(id).populate('image');
+    let user = await db.user.findById(id);
     if (!user) {
         log.end();
         throw new Error("user is not found");

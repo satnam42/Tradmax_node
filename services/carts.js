@@ -89,7 +89,8 @@ const create = async (model, context) => {
         const checkcart = await db.cart.findOne({ 
             user: { $eq: ObjectId(model.userId) }, 
             product: { $eq: ObjectId(model.productId) },
-            variation: { $eq: model.variation } 
+            variation: { $eq: model.variation },
+            status: { $eq: "Cart" }
         });
         if(!checkcart){
             const cart = build(model, context);
