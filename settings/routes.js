@@ -101,7 +101,7 @@ const configure = (app, logger) => {
 
     app.put(
         "/api/users/update/:id",
-        permit.context.validateToken,
+        permit.context.builder,
         validator.users.update,
         api.users.update
     );
@@ -174,36 +174,6 @@ const configure = (app, logger) => {
     //     '/api/images/remove',
     //     permit.context.builder,
     //     api.images.remove
-    // );
-
-    ///////////////event api's /////////////////
-
-    // app.post(
-    //     "/api/events/add",
-    //     permit.context.builder,
-    //     api.events.create
-    // );
-
-    // app.get(
-    //     "/api/events/listByUserId/:id",
-    //     permit.context.builder,
-    //     api.events.listByUserId
-    // );
-    // app.get(
-    //     "/api/events/list",
-    //     permit.context.builder,
-    //     api.events.list
-    // );
-    // app.put(
-    //     "/api/events/update/:id",
-    //     permit.context.builder,
-    //     api.events.update
-    // );
-
-    // app.delete(
-    //     "/api/events/delete/:id",
-    //     permit.context.builder,
-    //     api.events.remove
     // );
     
     /* Category Section */
@@ -331,6 +301,12 @@ const configure = (app, logger) => {
         permit.context.builder,
         api.orders.getOrder
     );
+
+    app.post(
+        "/api/orders/updateStatus",
+        permit.context.builder,
+        api.orders.updateStatus
+    );
     
 
     ///////////////notifications api's /////////////////
@@ -345,6 +321,7 @@ const configure = (app, logger) => {
     //     permit.context.validateToken,
     //     api.notifications.list
     // );
+
     log.end();
 };
 

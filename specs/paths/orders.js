@@ -44,5 +44,28 @@ module.exports = [{
             }
         }
     }
+},{
+    url: "/updateStatus",
+    post: {
+        summary: "updateStatus",
+        description: "updateStatus",
+        parameters: [{
+            in: "body",
+            name: "body",
+            description: "Model of updateStatus",
+            required: true,
+            schema: {
+                $ref: "#/definitions/updateStatus"
+            }
+        }],
+        responses: {
+            default: {
+                description: "Unexpected error",
+                schema: {
+                    $ref: "#/definitions/Error"
+                }
+            }
+        }
+    }
 },
  ];

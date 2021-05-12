@@ -16,7 +16,7 @@ const order = mongoose.Schema({
     //         }
     //     ]
     // },
-    // cart: {
+    // cart: { 
         cart: [
             {
                 cartId: { 
@@ -36,7 +36,7 @@ const order = mongoose.Schema({
     totalAmount: { type: Number, required: true },
     status: {
         type: String, default: "Ordered",
-        enum: ["Cart", "Ordered", "Delivered"]
+        enum: ["Cart", "Ordered", "Shipping", "Delivered"]
     },
     paymentStatus: {
         type: String, default: "Paid",

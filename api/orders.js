@@ -31,5 +31,20 @@ const getOrder = async (req, res) => {
     }
 };
 
+const updateStatus = async (req, res) => {
+    const log = req.context.logger.start(`api:orders:updateStatus`);
+    try {
+        const orders = await service.updateStatus(req.body, req.context);
+        const message = "Order Updated Successfully";
+        log.end();
+        return response.success(res, message, orders);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
 exports.placeOrder = placeOrder;
 exports.getOrder = getOrder;
+exports.updateStatus = updateStatus;

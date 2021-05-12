@@ -221,7 +221,7 @@ const deleteUser = async(id, context) => {
 
 const update = async(id, model, context) => {
     const log = context.logger.start(`services:users:update`);
-    let entity = await db.user.findById(id).populate('image');
+    let entity = await db.user.findById(id);
     if (!entity) {
         throw new Error("invalid user");
     }
