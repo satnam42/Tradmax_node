@@ -244,6 +244,12 @@ const configure = (app, logger) => {
         api.products.filterProducts
     );
 
+    app.delete(
+        "/api/products/deleteProduct/:id",
+        permit.context.builder,
+        api.products.deleteProduct
+    );
+
     /* Cart Section */
     
     app.post(

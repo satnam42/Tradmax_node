@@ -71,7 +71,7 @@ const create = async (model, context) => {
 
 
 const productsBySubCategories = async (query, context) => {
-    const log = context.logger.start(`services:productsBySubCategories:get`);
+    const log = context.logger.start(`services:products:productsBySubCategories`);
     let pageNo = Number(query.pageNo) || 1;
     let pageSize = Number(query.pageSize) || 10;
     let skipCount = pageSize * (pageNo - 1);
@@ -81,7 +81,7 @@ const productsBySubCategories = async (query, context) => {
 };
 
 const getAllProducts = async (query, context) => {
-    const log = context.logger.start(`services:getAllProducts:get`);
+    const log = context.logger.start(`services:products:getAllProducts`);
     let pageNo = Number(query.pageNo) || 1;
     let pageSize = Number(query.pageSize) || 10;
     let skipCount = pageSize * (pageNo - 1);
@@ -91,7 +91,7 @@ const getAllProducts = async (query, context) => {
 };
 
 const similarProducts = async (query, context) => {
-    const log = context.logger.start(`services:similarProducts:get`);
+    const log = context.logger.start(`services:products:similarProducts`);
     let pageNo = Number(query.pageNo) || 1;
     let pageSize = Number(query.pageSize) || 10;
     let skipCount = pageSize * (pageNo - 1);
@@ -115,16 +115,16 @@ const similarProducts = async (query, context) => {
 
 // };
 
-// const deleteProduct = async (id, context) => {
-//     const log = context.logger.start(`services:assignLeads:deletePotentialCustomer`);
+const deleteProduct = async (id, context) => {
+    const log = context.logger.start(`services:products:deleteProduct`);
 
-//     let isProductExists = await db.products.findById(id);
-//     await db.products.remove({ '_id': id });
-//     log.end();
-//     return isProductExists
-// };
+    let isProductExists = await db.product.findById(id);
+    await db.product.remove({ '_id': ObjectId(id) });
+    log.end();
+    return isProductExists
+};
 
-const uploadProductFiles = async(id, files,model, context) => {
+const uploadProductFiles = async(id, files, model, context) => {
     const log = context.logger.start(`services:products:uploadProductFiles`);
     let product = await db.product.findById(id);
     if (!files) {
@@ -157,18 +157,30 @@ const uploadProductFiles = async(id, files,model, context) => {
 
 };
 
-const filterProducts = async(query, context) => {
+const filterProducts = async(model, context) => {
     const log = context.logger.start(`services:products:filterProducts`);
-    let allProducts = await db.product.aggregate([
-        // { 
-        //     "$match": {
-        //         // price : { $gte :  Number(minPrice), $lte : Number(maxPrice)},
-        //         subCategory.name : { $eq: name },
-        //         // bedrooms : { $gte :  Number(minBedrooms), $lte : Number(maxBedrooms)},
-        //         // status: { $eq: 'active' }
-        //     }
-        //  }
-    ])
+    let minPrice = model.minPrice
+    let maxPrice = model.maxPrice;
+    var allProducts = db.product.aggregate([
+        {
+           $project: {
+            items: {
+                 $filter: {
+                    input: "$variation.items",
+                    as: "item",
+                    cond: { 
+                        $gte: [ "$$item.price", Number(minPrice) ],
+                        // $lte: [ "$$item.price",  Number(maxPrice) ]
+                    }
+                 }
+              }
+           }
+        }
+     ])
+    // { variation: { $elemMatch: { "items.price": { $gte :  Number(minPrice), $lte : Number(maxPrice)} } } }
+                // variation.items.price : { $gte :  Number(minPrice), $lte : Number(maxPrice)},
+                // "subCategory.name" : { $eq: model.subCategory },
+                // status: { $eq: 'active' }
     log.end();
     return allProducts;
 };
@@ -179,4 +191,4 @@ exports.getAllProducts = getAllProducts;
 exports.filterProducts = filterProducts;
 exports.productsBySubCategories = productsBySubCategories;
 exports.similarProducts = similarProducts;
-// exports.deleteProduct = deleteProduct;
+exports.deleteProduct = deleteProduct;

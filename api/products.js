@@ -84,7 +84,7 @@ const getAllProducts = async (req, res) => {
 const filterProducts = async (req, res) => {
     const log = req.context.logger.start(`api:products:productList`);
     try {
-        const products = await service.filterProducts(req.query, req.context);
+        const products = await service.filterProducts(req.body, req.context);
         log.end();
         return response.data(res, products);
     } catch (err) {
@@ -108,20 +108,20 @@ const filterProducts = async (req, res) => {
 //     }
 // };
 
-// const deleteProduct = async (req, res) => {
-//     const log = req.context.logger.start(`api:products:deleteProduct:${req.params.id}`);
-//     try {
-//         const task = await service.deleteProduct(req.params.id, req.context);
-//         log.end();
-//         let message = "product deleted Successfully";
-//         log.end();
-//         return response.success(res, message);
-//     } catch (err) {
-//         log.error(err);
-//         log.end();
-//         return response.failure(res, err.message);
-//     }
-// };
+const deleteProduct = async (req, res) => {
+    const log = req.context.logger.start(`api:products:deleteProduct:${req.params.id}`);
+    try {
+        const product = await service.deleteProduct(req.params.id, req.context);
+        log.end();
+        let message = "product deleted Successfully";
+        log.end();
+        return response.success(res, message);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
 
 
 const uploadProductFiles = async (req, res) => {
@@ -143,4 +143,4 @@ exports.filterProducts = filterProducts;
 exports.getAllProducts = getAllProducts;
 exports.productsBySubCategories = productsBySubCategories;
 exports.similarProducts = similarProducts
-// exports.deleteProduct = deleteProduct
+exports.deleteProduct = deleteProduct
