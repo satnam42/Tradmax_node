@@ -13,7 +13,8 @@ const failure = (res, message) => {
   res.status(400).json({
     isSuccess: false,
     statusCode: 400,
-    message: message
+    message: message,
+    data: Object.assign({}, [])
   });
 };
 
