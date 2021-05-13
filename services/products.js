@@ -159,75 +159,24 @@ const uploadProductFiles = async(id, files, model, context) => {
 
 const filterProducts = async(model, context) => {
     const log = context.logger.start(`services:products:filterProducts`);
-
-    // var query = {};
-
-    // if (model.name) {
-    //     query.name = model.name
-    // }
-    
-    // if (model.minPrice || model.maxPrice) {
-    //     query.minPrice = model.minPrice
-    //     query.maxPrice = model.maxPrice
-    // }
-    var products = db.product.find(
+    const products = db.product.find(
         {
             "$or": [
                 { "name" : { "$regex": model.name, "$options":"i"} },
                 { "subCategory.name" :   { "$regex": model.subCategory, "$options":"i"} }, 
-                { "cast" :           { "$regex": input_data, "$options":"i"} }, 
+                // { "variation.items.price" :           { "$regex": input_data, "$options":"i"} }, 
                 // { "writers" :        { "$regex": input_data, "$options":"i"} }, 
                 // { "genres.name" :    { "$regex": input_data, "$options":"i"} }, 
                 // { "directors" :      { "$regex": input_data, "$options":"i"} }
             ]
         },
-        // function(err,result) {
-        //     if(err) {
-        //        // respond error
-        //     } else {
-        //        // respond with data or empty
-        //     }
-        // }
     );
     log.end();
     return products;
-    // if (model.name) {
-    //     query["foo3"] = req.body.foo3;
-    // }
-    // let minPrice = model.minPrice
-    // let maxPrice = model.maxPrice;
-    // let color = model.color;
-    // let allProducts = await db.project.aggregate([
-    //     {
-    //         "$match": {
-    //             "variation.items": { $elemMatch: { value: color } } 
-    //             // price : { $gte :  Number(minPrice), $lte : Number(maxPrice)},
-    //             // propertyfor: { $eq: propertyfor },
-    //             // bedrooms : { $gte :  Number(minBedrooms), $lte : Number(maxBedrooms)},
-    //             // status: { $eq: 'active' }
-    //         }
-    //     },
-    // ])
-    /*var allProducts = db.product.aggregate([
-        {
-           $project: {
-            items: {
-                 $filter: {
-                    input: "$variation.items",
-                    as: "item",
-                    cond: { 
-                        $gte: [ "$$item.price", Number(minPrice) ],
-                        // $lte: [ "$$item.price",  Number(maxPrice) ]
-                    }
-                 }
-              }
-           }
-        }
-     ])*/
     // { variation: { $elemMatch: { "items.price": { $gte :  Number(minPrice), $lte : Number(maxPrice)} } } }
-                // variation.items.price : { $gte :  Number(minPrice), $lte : Number(maxPrice)},
-                // "subCategory.name" : { $eq: model.subCategory },
-                // status: { $eq: 'active' }
+    // variation.items.price : { $gte :  Number(minPrice), $lte : Number(maxPrice)},
+    // "subCategory.name" : { $eq: model.subCategory },
+    // status: { $eq: 'active' }
 };
 
 exports.create = create;

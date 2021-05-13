@@ -85,8 +85,9 @@ const filterProducts = async (req, res) => {
     const log = req.context.logger.start(`api:products:productList`);
     try {
         const products = await service.filterProducts(req.body, req.context);
+        let message = "Products Fetched Successfully";
         log.end();
-        return response.data(res, products);
+        return response.data( res,message, products);
     } catch (err) {
         log.error(err);
         log.end();
