@@ -27,13 +27,14 @@ const set = async (model, products, context) => {
 };
 
 const build = async (model, context) => {
-    const { name, description, units, image, subCategory, variation, status } = model;
+    const { name, description, units, content, price, subCategory, variation, status } = model;
     const log = context.logger.start(`services:products:build${model}`);
     let productModel = {
         name: name,
         units: units,
         description: description,
-        image: image,
+        price: price,
+        content: content,
         subCategory: subCategory,
         status: status,
         variation: variation,
@@ -75,21 +76,24 @@ const productsBySubCategories = async (query, context) => {
     let pageNo = Number(query.pageNo) || 1;
     let pageSize = Number(query.pageSize) || 10;
     let skipCount = pageSize * (pageNo - 1);
-    const products = await db.product.find({ "subCategory.id": query.subCategoryId }).skip(skipCount).limit(pageSize);
-    // const property = [];
-    // for (let element of products) {
-    //     let pId = element._id.toString();
-    //     let likesLs = await db.like.find({ propertyId: { $eq: pId } });
-    //     element.likeCount = likesLs.length;
-    //     likes.forEach(like => {
-    //         /*converting object id to string here*/
-    //         let propId = like.propertyId.toString();
-    //         if (propId === pId) {
-    //             element.isLiked = true;
-    //         }
-    //     });
-    //     property.push(element);
-    // }
+    let pageSort = Number(query.pageSort) || 1;
+    let priceSort = Number(query.priceSort) || 1;
+    const products = await db.product.find({ "subCategory.id": query.subCategoryId }).skip(skipCount).limit(pageSize).sort({ _id: pageSort , price: priceSort } );
+
+    const product = [];
+    for (let element of products) {
+        let pId = element._id.toString();
+        let likesLs = await db.favorite.find({ user: { $eq: query.userId } ,product: { $eq: pId } });
+        element.likeCount = likesLs.length;
+        likesLs.forEach(like => {
+            /*converting object id to string here*/
+            let prodId = like.product.toString();
+            if (prodId === pId) {
+                element.isLiked = true;
+            }
+        });
+        product.push(element);
+    }
     log.end();
     return products;
 };

@@ -29,17 +29,35 @@ module.exports = [{
             description: "product  by SUbcategories",
             parameters: [{
                     in: "query",
+                    type: "string",
+                    name: "userId",
+                    description: "pass user ID here",
+                    required: true
+                },{
+                    in: "query",
                     type: "integer",
                     name: "pageNo",
                     description: "pageNo",
-                    required: true
+                    required: false
                 },
                 {
                     in: "query",
                     type: "integer",
                     name: "pageSize",
                     description: "pageSize",
-                    required: true
+                    required: false
+                },{
+                    in: "query",
+                    type: "integer",
+                    name: "pageSort",
+                    description: "pass 1 for oldest and -1 for newest",
+                    required: false
+                },{
+                    in: "query",
+                    type: "integer",
+                    name: "priceSort",
+                    description: "low to high OR high to low",
+                    required: false
                 },
                 {
                     in: "query",
