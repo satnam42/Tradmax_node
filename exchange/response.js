@@ -14,7 +14,7 @@ const failure = (res, message) => {
     isSuccess: false,
     statusCode: 400,
     message: message,
-    data: Object.assign({}, [])
+    // data: Object.assign({}, [])
   });
 };
 
