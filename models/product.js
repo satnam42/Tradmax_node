@@ -24,8 +24,11 @@ const product = mongoose.Schema({
         name: { type: String, default: "" }
     },
     description: { type: String, required: true },
-    // price: { type: String, required: true },
+    price: { type: String, required: true },
+    content: { type: String, required: false },
     image: { type: String },
+    isLiked: { type: Boolean, default: false },
+    likeCount: { type: String, default: "0" },
     productFiles: [{
         url : {type: String, default: ""},
         type: {type: String, default: ""} 

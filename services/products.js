@@ -76,6 +76,20 @@ const productsBySubCategories = async (query, context) => {
     let pageSize = Number(query.pageSize) || 10;
     let skipCount = pageSize * (pageNo - 1);
     const products = await db.product.find({ "subCategory.id": query.subCategoryId }).skip(skipCount).limit(pageSize);
+    // const property = [];
+    // for (let element of products) {
+    //     let pId = element._id.toString();
+    //     let likesLs = await db.like.find({ propertyId: { $eq: pId } });
+    //     element.likeCount = likesLs.length;
+    //     likes.forEach(like => {
+    //         /*converting object id to string here*/
+    //         let propId = like.propertyId.toString();
+    //         if (propId === pId) {
+    //             element.isLiked = true;
+    //         }
+    //     });
+    //     property.push(element);
+    // }
     log.end();
     return products;
 };
@@ -159,18 +173,34 @@ const uploadProductFiles = async(id, files, model, context) => {
 
 const filterProducts = async(model, context) => {
     const log = context.logger.start(`services:products:filterProducts`);
-    const products = db.product.find(
-        {
-            "$or": [
-                { "name" : { "$regex": model.name, "$options":"i"} },
-                { "subCategory.name" :   { "$regex": model.subCategory, "$options":"i"} }, 
-                // { "variation.items.price" :           { "$regex": input_data, "$options":"i"} }, 
-                // { "writers" :        { "$regex": input_data, "$options":"i"} }, 
-                // { "genres.name" :    { "$regex": input_data, "$options":"i"} }, 
-                // { "directors" :      { "$regex": input_data, "$options":"i"} }
-            ]
-        },
-    );
+    let minPrice = model.minPrice
+    let maxPrice = model.maxPrice;
+    const query = {}
+    if (model.name) {
+        query.name = model.name
+    }
+    if (model.minPrice || model.maxPrice) {
+            query.price = { $gte :  Number(minPrice), $lte : Number(maxPrice) }
+    }
+    // if (model.subCategory) {
+    //     query.subCategory.name = model.subCategory
+    // }
+    const products = db.product.find(query);
+    
+    
+    
+    // find(
+    //     {
+    //         "$or": [
+    //             { "name" : { "$regex": model.name, "$options":"i"} },
+    //             { "subCategory.name" :   { "$regex": model.subCategory, "$options":"i"} }, 
+    //             // { "variation.items.price" :           { "$regex": input_data, "$options":"i"} }, 
+    //             // { "writers" :        { "$regex": input_data, "$options":"i"} }, 
+    //             // { "genres.name" :    { "$regex": input_data, "$options":"i"} }, 
+    //             // { "directors" :      { "$regex": input_data, "$options":"i"} }
+    //         ]
+    //     },
+    // );
     log.end();
     return products;
     // { variation: { $elemMatch: { "items.price": { $gte :  Number(minPrice), $lte : Number(maxPrice)} } } }

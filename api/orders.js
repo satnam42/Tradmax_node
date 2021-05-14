@@ -45,6 +45,21 @@ const updateStatus = async (req, res) => {
     }
 };
 
+const getAllOrders = async (req, res) => {
+    const log = req.context.logger.start(`api:orders:getAllOrders`);
+    try {
+        const orders = await service.getAllOrders(req.query, req.context);
+        let message = "All Orders Fetched Successfully";
+        log.end();
+        return response.success(res, message, orders);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
 exports.placeOrder = placeOrder;
 exports.getOrder = getOrder;
 exports.updateStatus = updateStatus;
+exports.getAllOrders = getAllOrders;

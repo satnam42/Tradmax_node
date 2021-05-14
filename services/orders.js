@@ -81,7 +81,24 @@ const updateStatus = async (model, context) => {
     }
 };
 
+const getAllOrders = async (query, context) => {
+    const log = context.logger.start(`services:orders:getAllOrders`);
+    const carts = await db.order.find()
+    .populate('user')
+    .populate('address')
+    .populate({
+        path: 'cart.cartId',
+        model: 'cart',
+        populate : {
+            path : 'product'
+        },
+    })
+    log.end();
+    return carts;
+};
+
 
 exports.placeOrder = placeOrder;
 exports.getOrder = getOrder;
 exports.updateStatus = updateStatus;
+exports.getAllOrders = getAllOrders;

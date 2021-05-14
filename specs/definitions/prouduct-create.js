@@ -8,6 +8,12 @@ module.exports = [
             units: {
                 type: "string"
             },
+            price: {
+                type: "string"
+            },
+            content: {
+                type: "string"
+            },
             description: {
                 type: "string"
             },

@@ -313,6 +313,12 @@ const configure = (app, logger) => {
         permit.context.builder,
         api.orders.updateStatus
     );
+
+    app.get(
+        "/api/orders/getAllOrders",
+        permit.context.builder,
+        api.orders.getAllOrders
+    );
     
 
     ///////////////notifications api's /////////////////
