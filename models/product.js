@@ -14,7 +14,7 @@ const product = mongoose.Schema({
     },
     status: {
         type: String, default: "active",
-        enum: ["active", "inActive", "out of stock"]
+        enum: ["active", "inactive", "out of stock"]
     },
     subCategory: {
         id: {

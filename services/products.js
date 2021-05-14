@@ -1,29 +1,50 @@
 const imageUrl = require('config').get('image').url
 const ObjectId = require("mongodb").ObjectID;
 
-const set = async (model, products, context) => {
+const set = async (model, product, context) => {
 
     const log = context.logger.start("services:products:set");
+
     if (model.name !== "string" && model.name !== undefined) {
-        products.name = model.name;
+        product.name = model.name;
     }
-    if (model.subCategory !== "string" && model.subCategory !== undefined) {
-        let isSubCategoryExists = await db.categories.findById(model.subCategory)
-        if (isSubCategoryExists) {
-            products.subCategory = { id: isSubCategoryExists.id, name: isSubCategoryExists.name }
-        } else {
-            throw new Error("subcategory not found");
-        }
+
+    // if (model.subCategory !== "string" && model.subCategory !== undefined) {
+    //     let isSubCategoryExists = await db.category.findById(model.subCategory)
+    //     if (isSubCategoryExists) {
+    //         product.subCategory = { id: isSubCategoryExists.id, name: isSubCategoryExists.name }
+    //     } else {
+    //         throw new Error("subcategory not found");
+    //     }
+    // }
+
+    if (model.variation !== "string" && model.variation !== undefined) {
+        product.variation = model.variation;
     }
-    if (model.status !== "string" && model.status !== undefined) {
-        products.status = model.status;
-    }
+
     if (model.description !== "string" && model.description !== undefined) {
-        products.description = model.description;
+        product.description = model.description;
     }
+    
+    if (model.content !== "string" && model.content !== undefined) {
+        product.content = model.content;
+    }
+    
+    if (model.units !== "string" && model.units !== undefined) {
+        product.units = model.units;
+    }
+
+    if (model.price !== "string" && model.price !== undefined) {
+        product.price = model.price;
+    }
+
+    if (model.status !== "string" && model.status !== undefined) {
+        product.status = model.status;
+    }
+
     log.end();
-    await products.save();
-    return products;
+    await product.save();
+    return product;
 };
 
 const build = async (model, context) => {
@@ -118,20 +139,20 @@ const similarProducts = async (query, context) => {
     return products;
 };
 
-// const update = async (id, model, context) => {
-//     const log = context.logger.start(`services:products:update`);
-//     if (!id) {
-//         throw new Error(" product id is required");
-//     }
-//     let product = await db.products.findById(id);
-//     if (!product) {
-//         throw new Error("invalid products");
-//     }
-//     const products = await set(model, product, context);
-//     log.end();
-//     return products
+const update = async (id, model, context) => {
+    const log = context.logger.start(`services:products:update`);
+    if (!id) {
+        throw new Error(" product id is required");
+    }
+    let product = await db.product.findById(id);
+    if (!product) {
+        throw new Error("invalid products");
+    }
+    const products = await set(model, product, context);
+    log.end();
+    return products
 
-// };
+};
 
 const deleteProduct = async (id, context) => {
     const log = context.logger.start(`services:products:deleteProduct`);
@@ -220,3 +241,4 @@ exports.filterProducts = filterProducts;
 exports.productsBySubCategories = productsBySubCategories;
 exports.similarProducts = similarProducts;
 exports.deleteProduct = deleteProduct;
+exports.update = update;

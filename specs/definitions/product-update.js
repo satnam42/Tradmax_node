@@ -1,28 +1,25 @@
 module.exports = [
     {
-        name: "productCreate",
+        name: "productUpdate",
         properties: {
             name: {
-                type: "string"
-            },
-            units: {
-                type: "string"
-            },
-            price: {
-                type: "string"
-            },
-            content: {
                 type: "string"
             },
             description: {
                 type: "string"
             },
-            // image: {
-            //     type: "string",
-            // },
-            subCategory: {
+            content: {
                 type: "string"
             },
+            units: {
+                type: "number"
+            },
+            price: {
+                type: "number"
+            },
+            // subCategory: {
+            //     type: "string"
+            // },
             status: {
                 type: "string",
                 enum: ["active", "inactive", "out of stock"]
@@ -35,13 +32,14 @@ module.exports = [
                         items: {
                             type: 'array',
                             properties: {
-                                value: { type: "string", default: "" },
+                                value: { type: "string" },
                                 price: { type: "number", default: 0 },
                             }
                         }
                     }
                 }
             },
+
         }
     }
 ];

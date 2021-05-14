@@ -210,6 +210,13 @@ const configure = (app, logger) => {
         api.products.create
     );
 
+    app.put(
+        "/api/products/update/:id",
+        permit.context.builder,
+        // validator.users.update, 
+        api.products.update
+    );
+
     app.get(
         "/api/products/getAllProducts",
         permit.context.builder,

@@ -95,19 +95,19 @@ const filterProducts = async (req, res) => {
     }
 };
 
-// const update = async (req, res) => {
-//     const log = req.context.logger.start(`api:products:update:${req.params.id}`);
-//     try {
-//         const product = await service.update(req.params.id, req.body, req.context);
-//         let message = 'product updated successfully'
-//         log.end();
-//         return response.success(res, message, product);
-//     } catch (err) {
-//         log.error(err);
-//         log.end();
-//         return response.failure(res, err.message);
-//     }
-// };
+const update = async (req, res) => {
+    const log = req.context.logger.start(`api:products:update:${req.params.id}`);
+    try {
+        const product = await service.update(req.params.id, req.body, req.context);
+        let message = 'product updated successfully'
+        log.end();
+        return response.success(res, message, product);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
 
 const deleteProduct = async (req, res) => {
     const log = req.context.logger.start(`api:products:deleteProduct:${req.params.id}`);
@@ -145,3 +145,4 @@ exports.getAllProducts = getAllProducts;
 exports.productsBySubCategories = productsBySubCategories;
 exports.similarProducts = similarProducts
 exports.deleteProduct = deleteProduct
+exports.update = update;

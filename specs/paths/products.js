@@ -206,7 +206,7 @@ module.exports = [{
                 {
                     in: "body",
                     name: "body",
-                    description: "Model of asignVendor",
+                    description: "Model of product update",
                     required: true,
                     schema: {
                         $ref: "#/definitions/productUpdate"
