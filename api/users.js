@@ -183,8 +183,9 @@ const uploadImage = async (req, res) => {
     const log = req.context.logger.start(`api:users:uploadImage`);
     try {
         const url = await service.uploadImage(req.files, req.body, req.context);
+        const message = "Image uploaded";
         log.end();
-        return response.data(res, url);
+        return response.data(res, message, url);
     } catch (err) {
         log.error(err);
         log.end();
