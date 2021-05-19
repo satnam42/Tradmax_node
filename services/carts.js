@@ -25,42 +25,6 @@ const ObjectId = require("mongodb").ObjectID;
 //     return products;
 // };
 
-const updateAddress = (model, address, context) => {
-    const log = context.logger.start("services:carts:updateAddress");
-    if (model.fullName !== "string" && model.fullName !== undefined) {
-        address.fullName = model.fullName;
-    }
-
-    if (model.address !== "string" && model.address !== undefined) {
-        address.address = model.address;
-    }
-
-    if (model.city !== "string" && model.city !== undefined) {
-        address.city = model.city;
-    }
-
-    if (model.state !== "string" && model.state !== undefined) {
-        address.state = model.state;
-    }
-
-    if (model.country !== "string" && model.country !== undefined) {
-        address.country = model.country;
-    }
-
-    if (model.zipCode !== "string" && model.zipCode !== undefined) {
-        address.zipCode = model.zipCode;
-    }
-
-    if (model.country !== "string" && model.country !== undefined) {
-        address.country = model.country;
-    }
-
-    log.end();
-    address.save();
-    return address;
-
-};
-
 const build = async (model, context) => {
     const { userId, productId, quantity, total, variation, status } = model;
     const log = context.logger.start(`services:carts:build${model}`);
@@ -183,12 +147,49 @@ const deleteItem = async (id, context) => {
     
 };
 
+const updateAddress = (model, address, context) => {
+    const log = context.logger.start("services:carts:updateAddress");
+    if (model.fullName !== "string" && model.fullName !== undefined) {
+        address.fullName = model.fullName;
+    }
+
+    if (model.address !== "string" && model.address !== undefined) {
+        address.address = model.address;
+    }
+
+    if (model.city !== "string" && model.city !== undefined) {
+        address.city = model.city;
+    }
+
+    if (model.state !== "string" && model.state !== undefined) {
+        address.state = model.state;
+    }
+
+    if (model.country !== "string" && model.country !== undefined) {
+        address.country = model.country;
+    }
+
+    if (model.zipCode !== "string" && model.zipCode !== undefined) {
+        address.zipCode = model.zipCode;
+    }
+
+    if (model.country !== "string" && model.country !== undefined) {
+        address.country = model.country;
+    }
+
+    log.end();
+    address.save();
+    return address;
+
+};
+
 const addAddress = async (model, context) => {
     const log = context.logger.start("services:carts:addAddress");
     if(!model.addressId){
-        const { fullName, address, city, state, zipCode, country } = model;
+        const { userId, fullName, address, city, state, zipCode, country } = model;
         // const log = context.logger.start(`services:carts:build${model}`);
         let addressModel = {
+            user: userId,
             fullName: fullName,
             address: address,
             city: city,
@@ -215,11 +216,11 @@ const addAddress = async (model, context) => {
 const getAddress = async (body,context) => {
     const log = context.logger.start(`services:carts:getAddress`);
     if(body.addressId){
-        const address = await db.address.find({ _id: body.addressId });
+        const address = await db.address.find({ _id: body.addressId }).populate('user');
         log.end();
         return address;
     }else{
-        const address = await db.address.find();
+        const address = await db.address.find({ user: body.userId }).populate('user');
         log.end();
         return address;
     }

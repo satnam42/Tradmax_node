@@ -123,8 +123,9 @@ const getAddress = async (req, res) => {
     const log = req.context.logger.start(`api:carts:getAddress`);
     try {
         const address = await service.getAddress(req.body, req.context);
+        let message = "Address Fetched Successfully";
         log.end();
-        return response.data(res, address);
+        return response.data(res, message, address);
     } catch (err) {
         log.error(err);
         log.end();
