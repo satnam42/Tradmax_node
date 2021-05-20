@@ -12,7 +12,7 @@ const favorite = mongoose.Schema({
         required: true
     },
     isFav: { type: String, default: true },
-    variation: { type: String, required: true },
+    // variation: { type: String, required: true },
     createdOn: { type: Date, default: Date.now },
     updatedOn: { type: Date, default: Date.now }
 });

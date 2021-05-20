@@ -78,13 +78,13 @@ const addToFav = async (model, context) => {
     const isProductExists = await db.favorite.findOne({ 
         user: { $eq: ObjectId(model.userId) }, 
         product: { $eq: ObjectId(model.productId) },
-        variation: { $eq: model.variation } 
+        // variation: { $eq: model.variation } 
     });
     if(isProductExists){
         let removeProduct = await db.favorite.deleteOne({ 
             user: { $eq: ObjectId(model.userId) }, 
             product: { $eq: ObjectId(model.productId) },
-            variation: { $eq: model.variation } 
+            // variation: { $eq: model.variation } 
         });
         log.end();
         return removeProduct
@@ -92,7 +92,7 @@ const addToFav = async (model, context) => {
         let favModel = {
             user: model.userId,
             product: model.productId,
-            variation: model.variation,
+            // variation: model.variation,
             createdOn: new Date()
         }
         const favproduct = await new db.favorite(favModel).save();

@@ -8,9 +8,9 @@ module.exports = [
             productId: {
                 type: "string"
             },
-            variation: {
-                type: "string"
-            },
+            // variation: {
+            //     type: "string"
+            // },
         }
     }
 ];
