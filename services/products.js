@@ -105,7 +105,8 @@ const productsBySubCategories = async (query, context) => {
     for (let element of products) {
         let pId = element._id.toString();
         let likesLs = await db.favorite.find({ user: { $eq: query.userId } ,product: { $eq: pId } });
-        element.likeCount = likesLs.length;
+        let likes = await db.favorite.find({ product: { $eq: pId } });
+        element.likeCount = likes.length;
         likesLs.forEach(like => {
             /*converting object id to string here*/
             let prodId = like.product.toString();
@@ -125,6 +126,21 @@ const getAllProducts = async (query, context) => {
     let pageSize = Number(query.pageSize) || 10;
     let skipCount = pageSize * (pageNo - 1);
     const products = await db.product.find().skip(skipCount).limit(pageSize);
+    const product = [];
+    for (let element of products) {
+        let pId = element._id.toString();
+        let likesLs = await db.favorite.find({ user: { $eq: query.userId } ,product: { $eq: pId } });
+        let likes = await db.favorite.find({ product: { $eq: pId } });
+        element.likeCount = likes.length;
+        likesLs.forEach(like => {
+            /*converting object id to string here*/
+            let prodId = like.product.toString();
+            if (prodId === pId) {
+                element.isLiked = true;
+            }
+        });
+        product.push(element);
+    }
     log.end();
     return products;
 };

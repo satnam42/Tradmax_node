@@ -114,6 +114,13 @@ module.exports = [{
             description: "product  by SUbcategories",
             parameters: [{
                     in: "query",
+                    type: "string",
+                    name: "userId",
+                    description: "pass user ID here",
+                    required: false
+                },
+                {
+                    in: "query",
                     type: "integer",
                     name: "pageNo",
                     description: "pageNo",
