@@ -75,12 +75,17 @@ const getCarts = async (query, context) => {
 
 const addToFav = async (model, context) => {
     const log = context.logger.start("services:carts:addToFav");
-    const isProductExists = await db.favorite.findOne({ 
+    const isProductExists = await db.product.findById(model.
+        productId)
+    if(!isProductExists){
+        throw new Error("product not found");
+    }
+    const isLiked = await db.favorite.findOne({ 
         user: { $eq: ObjectId(model.userId) }, 
         product: { $eq: ObjectId(model.productId) },
         // variation: { $eq: model.variation } 
     });
-    if(isProductExists){
+    if(isLiked){
         let removeProduct = await db.favorite.deleteOne({ 
             user: { $eq: ObjectId(model.userId) }, 
             product: { $eq: ObjectId(model.productId) },
