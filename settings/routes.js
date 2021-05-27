@@ -4,6 +4,7 @@ const fs = require("fs");
 const api = require("../api");
 const specs = require("../specs");
 const permit = require("../permit")
+const path = require("path");
 const validator = require("../validators");
 
 const configure = (app, logger) => {
