@@ -5,6 +5,7 @@ const api = require("../api");
 const specs = require("../specs");
 const permit = require("../permit")
 const path = require("path");
+const express = require("express");
 const validator = require("../validators");
 
 const configure = (app, logger) => {
