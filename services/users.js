@@ -324,7 +324,7 @@ const sendMail = async(email, message, subject) => {
         service: 'Gmail',
         auth: {
             user: `emmieandrewwork@gmail.com`,
-            pass: `Notsure%1`
+            pass: `lhbxxjikhpslyxvu`
         }
     });
     // email send to registered email
