@@ -249,7 +249,7 @@ const sendOtp = async(user, context) => {
     }
     let message = `hi ${user.firstName} Your 4 digit One Time Password: <br>${OTP}<br></br>
       otp valid only 4 minutes`
-    let = subject = "One Time Password"
+    let subject = "One Time Password"
     const isEmailSent = await sendMail(user.email, message, subject)
     if (!isEmailSent) {
         throw new Error('something went wrong')
