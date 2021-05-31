@@ -10,7 +10,7 @@ const product = mongoose.Schema({
                 value: { type: String }, //red,blue,white
                 price:{type: String} //10,20,50
             },
-        ], required: true
+        ]
     },
     status: {
         type: String, default: "active",
@@ -21,8 +21,7 @@ const product = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "subCategories"
         },
-        name: { type: String, default: "" },
-         required: true
+        name: { type: String, default: "" }
     },
     description: { type: String, required: true },
     price: { type: String, required: true },
