@@ -91,7 +91,6 @@ const create = async (model, context) => {
 //     return products;
 // };
 
-
 const productsBySubCategories = async (query, context) => {
     const log = context.logger.start(`services:products:productsBySubCategories`);
     let pageNo = Number(query.pageNo) || 1;
@@ -250,6 +249,51 @@ const filterProducts = async(model, context) => {
     // status: { $eq: 'active' }
 };
 
+const search = async(query, context) => {
+    if(query.searchType == 'product'){
+        let user = context.user;
+        let allproduct = await db.product.find({
+            $or: [{
+                "name": query.search
+            },{
+                "description": query.search
+            },{
+                "price": query.search
+            },{
+                "subCategory.name": query.search
+            }],
+        });
+        const log = context.logger.start(`services:products:search`);
+        log.end();
+        const product = [];
+        for (let element of allproduct) {
+            let pId = element._id.toString();
+            let likesLs = await db.favorite.find({ user: { $eq: ObjectId(user.id) } ,product: { $eq: pId } });
+            let likes = await db.favorite.find({ product: { $eq: pId } });
+            element.likeCount = likes.length;
+            likesLs.forEach(like => {
+                /*converting object id to string here*/
+                let prodId = like.product.toString();
+                if (prodId === pId) {
+                    element.isLiked = true;
+                }
+            });
+            product.push(element);
+        }
+        return allproduct;
+    }
+    else if(query.searchType == 'category'){
+        let allproduct = await db.category.find({
+            $or: [{
+                "name": query.search
+            }],
+        });
+        const log = context.logger.start(`services:products:search`);
+        log.end();
+        return allproduct;
+    }
+};
+
 exports.create = create;
 exports.uploadProductFiles = uploadProductFiles;
 exports.getAllProducts = getAllProducts;
@@ -258,3 +302,4 @@ exports.productsBySubCategories = productsBySubCategories;
 exports.similarProducts = similarProducts;
 exports.deleteProduct = deleteProduct;
 exports.update = update;
+exports.search = search;

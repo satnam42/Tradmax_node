@@ -4,7 +4,7 @@ const user = mongoose.Schema({
     fullname: { type: String, required: true },
     email: { type: String, required: true, trim: true, },
     phoneNumber: { type: String, required: false, trim: true, },
-    password: { type: String, required: true },
+    password: { type: String, required: false },
     otp: { type: Number, required: false, trim: true, },
     address: { type: String, required: false, trim: true, },
     state: { type: String, required: false, trim: true, },
@@ -23,6 +23,8 @@ const user = mongoose.Schema({
     //     type: { type: String, default: "Point" , required: true,},
     //     coordinates: [Number]
     // },
+    socialLinkId: { type: String, default: "", required: false },
+    socialType: { type: String, default: "", required: false },
     role: { type: String, required: false,default: "User" },
     deviceToken: { type: String, default: "" },
     createdOn: { type: Date, default: Date.now },

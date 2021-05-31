@@ -5,9 +5,11 @@ const imageUrl = require('config').get('image').url
 
 //register user
 const buildUser = async(model, context) => {
-    const { status, fullname, country, address, otp, state, city, zipCode, phoneNumber, email, password, roleId, } = model;
+    const { platform, socialLinkId, status, fullname, country, address, otp, state, city, zipCode, phoneNumber, email, password, roleId, } = model;
     const log = context.logger.start(`services:users:build${model}`);
     const user = await new db.user({
+        socialLinkId: socialLinkId,
+        platform: platform,
         fullname: fullname,
         phoneNumber: phoneNumber,
         email: email,
@@ -372,6 +374,39 @@ const uploadImage = async (files, body, context) => {
     return user
 };
 
+const socialLink = async(model, context) => {
+    const log = context.logger.start("services:users:socialLink");
+
+    if (!model.socialLinkId) {
+        throw new Error("SocialLinkId is requried");
+    }
+    // if (!model.userName) {
+    //     throw new Error("userName is requried");
+    // }
+    let user = await db.user.findOne({ socialLinkId: model.socialLinkId });
+    if (!user) {
+        // const userName = await db.user.findOne({ userName: { $eq: model.userName } });
+        // if(userName){
+        //     throw new Error("Choose another username");
+        // }
+        const createdUser = await buildUser(model, context);
+        const token = auth.getToken(createdUser.id, false, context);
+        createdUser.apiToken = token;
+        createdUser.save();
+        log.end();
+        return createdUser;
+    }
+    const token = auth.getToken(user.id, false, context);
+    user.apiToken = token;
+    user.deviceToken = model.deviceToken;
+    user.lat = model.lat;
+    user.long = model.long;
+    user.updatedOn = new Date();
+    user.save();
+    log.end();
+    return user;
+};
+
 exports.login = login;
 exports.create = create;
 exports.search = search;
@@ -386,3 +421,4 @@ exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
 exports.newPassword = newPassword;
 exports.adminlogin = adminlogin;
 exports.uploadImage = uploadImage;
+exports.socialLink = socialLink;

@@ -127,6 +127,12 @@ const configure = (app, logger) => {
         api.users.uploadImage
     );
 
+    app.post(
+        "/api/users/socialLink",
+        permit.context.builder,
+        api.users.socialLink
+    );
+
     //role api's //
 
     app.post(
@@ -205,6 +211,12 @@ const configure = (app, logger) => {
     );
 
     /* Products Section */
+
+    app.post(
+        "/api/products/search",
+        permit.context.validateToken,
+        api.products.search
+    );
     
     app.post(
         "/api/products/addProduct",

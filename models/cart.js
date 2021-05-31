@@ -13,6 +13,8 @@ const cart = mongoose.Schema({
     },
     quantity: { type: Number, required: true },
     // tax: { type: Number, default: 10 },
+    isLiked: { type: Boolean, default: false },
+    likeCount: { type: String, default: "0" },
     total: { type: Number, required: true },
     variation: { type: String, required: true },
     status: {

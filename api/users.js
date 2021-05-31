@@ -193,6 +193,20 @@ const uploadImage = async (req, res) => {
     }
 };
 
+const socialLink = async(req, res) => {
+    const log = req.context.logger.start("api:users:socialLink");
+    try {
+        const user = await service.socialLink(req.body, req.context);
+        const message = "Register successful"
+        log.end();
+        return response.authorized(res, message, user);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
 exports.login = login;
 exports.create = create;
 exports.search = search;
@@ -206,3 +220,4 @@ exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
 exports.newPassword = newPassword;
 exports.adminlogin = adminlogin;
 exports.uploadImage = uploadImage;
+exports.socialLink = socialLink;
