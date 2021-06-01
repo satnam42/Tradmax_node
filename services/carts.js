@@ -85,7 +85,7 @@ const getCarts = async (query, context) => {
         product.push(element);
     }
     log.end();
-    return product;
+    return products;
 };
 
 const addToFav = async (model, context) => {
