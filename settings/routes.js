@@ -183,6 +183,20 @@ const configure = (app, logger) => {
     //     permit.context.builder,
     //     api.images.remove
     // );
+
+    /* Banner Section */
+
+    app.post(
+        "/api/banners/createBanner",
+        permit.context.builder,
+        api.banners.createBanner
+    );
+
+    app.get(
+        "/api/banners/getBanners",
+        permit.context.builder,
+        api.banners.getBanners
+    );
     
     /* Category Section */
 
