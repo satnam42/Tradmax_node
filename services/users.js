@@ -377,8 +377,17 @@ const uploadImage = async (files, body, context) => {
 const socialLink = async(model, context) => {
     const log = context.logger.start("services:users:socialLink");
 
-    if (!model.socialLinkId) {
+    // if (!model.socialLinkId) {
+    //     throw new Error("SocialLinkId is requried");
+    // }
+    if (model.socialLinkId == "string" || model.socialLinkId == undefined) {
         throw new Error("SocialLinkId is requried");
+    }
+    if (model.email == "string" || model.email == undefined) {
+        throw new Error("email is requried");
+    }
+    if (model.fullname == "string" || model.fullname == undefined) {
+        throw new Error("fullname is requried");
     }
     // if (!model.userName) {
     //     throw new Error("userName is requried");

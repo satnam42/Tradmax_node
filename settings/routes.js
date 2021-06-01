@@ -130,6 +130,7 @@ const configure = (app, logger) => {
     app.post(
         "/api/users/socialLink",
         permit.context.builder,
+        validator.users.social,
         api.users.socialLink
     );
 
