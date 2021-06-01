@@ -24,7 +24,7 @@ const user = mongoose.Schema({
     //     coordinates: [Number]
     // },
     socialLinkId: { type: String, default: "", required: false },
-    socialType: { type: String, default: "", required: false },
+    platform: { type: String, default: "", required: false },
     role: { type: String, required: false,default: "User" },
     deviceToken: { type: String, default: "" },
     createdOn: { type: Date, default: Date.now },

@@ -377,9 +377,6 @@ const uploadImage = async (files, body, context) => {
 const socialLink = async(model, context) => {
     const log = context.logger.start("services:users:socialLink");
 
-    // if (!model.socialLinkId) {
-    //     throw new Error("SocialLinkId is requried");
-    // }
     if (model.socialLinkId == "string" || model.socialLinkId == undefined) {
         throw new Error("SocialLinkId is requried");
     }
@@ -389,31 +386,28 @@ const socialLink = async(model, context) => {
     if (model.fullname == "string" || model.fullname == undefined) {
         throw new Error("fullname is requried");
     }
-    // if (!model.userName) {
-    //     throw new Error("userName is requried");
-    // }
     let user = await db.user.findOne({ socialLinkId: model.socialLinkId });
     if (!user) {
-        // const userName = await db.user.findOne({ userName: { $eq: model.userName } });
-        // if(userName){
-        //     throw new Error("Choose another username");
-        // }
+        const userEmail = await db.user.findOne({ email: { $eq: model.email } });
+        if(userEmail){
+            throw new Error("Choose another email");
+        }
         const createdUser = await buildUser(model, context);
         const token = auth.getToken(createdUser.id, false, context);
-        createdUser.apiToken = token;
+        createdUser.token = token;
         createdUser.save();
         log.end();
         return createdUser;
+    }else{
+        const token = auth.getToken(user.id, false, context);
+        user.token = token;
+        user.deviceToken = model.deviceToken;
+        user.platform = model.platform;
+        user.updatedOn = new Date();
+        user.save();
+        log.end();
+        return user;
     }
-    const token = auth.getToken(user.id, false, context);
-    user.apiToken = token;
-    user.deviceToken = model.deviceToken;
-    user.lat = model.lat;
-    user.long = model.long;
-    user.updatedOn = new Date();
-    user.save();
-    log.end();
-    return user;
 };
 
 exports.login = login;
