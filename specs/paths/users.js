@@ -22,6 +22,29 @@ module.exports = [{
         }
     },
     {
+        url: "/socialLink",
+        post: {
+            summary: "Login user with socialLink",
+            description: "user login into system with socialLink and get its token to access apis",
+            parameters: [{ in: "body",
+                name: "body",
+                description: "Model of login user with socialLink",
+                required: true,
+                schema: {
+                    $ref: "#/definitions/socialLink"
+                }
+            }],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
         url: "/adminlogin",
         post: {
             summary: "Admin Login",

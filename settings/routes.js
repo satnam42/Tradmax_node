@@ -127,6 +127,13 @@ const configure = (app, logger) => {
         api.users.uploadImage
     );
 
+    app.post(
+        "/api/users/socialLink",
+        permit.context.builder,
+        validator.users.social,
+        api.users.socialLink
+    );
+
     //role api's //
 
     app.post(
@@ -177,6 +184,20 @@ const configure = (app, logger) => {
     //     permit.context.builder,
     //     api.images.remove
     // );
+
+    /* Banner Section */
+
+    app.post(
+        "/api/banners/createBanner",
+        permit.context.builder,
+        api.banners.createBanner
+    );
+
+    app.get(
+        "/api/banners/getBanners",
+        permit.context.builder,
+        api.banners.getBanners
+    );
     
     /* Category Section */
 
@@ -205,6 +226,12 @@ const configure = (app, logger) => {
     );
 
     /* Products Section */
+
+    app.post(
+        "/api/products/search",
+        permit.context.validateToken,
+        api.products.search
+    );
     
     app.post(
         "/api/products/addProduct",

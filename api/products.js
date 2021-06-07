@@ -138,6 +138,20 @@ const uploadProductFiles = async (req, res) => {
     }
 };
 
+const search = async(req, res) => {
+    const log = req.context.logger.start(`api:products:search`);
+    try {
+        const products = await service.search(req.body, req.context);
+        const message = "data fetched Successfully";
+        log.end();
+        return response.success(res, message, products);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
 exports.create = create;
 exports.uploadProductFiles = uploadProductFiles;
 exports.filterProducts = filterProducts;
@@ -146,3 +160,4 @@ exports.productsBySubCategories = productsBySubCategories;
 exports.similarProducts = similarProducts
 exports.deleteProduct = deleteProduct
 exports.update = update;
+exports.search = search;

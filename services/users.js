@@ -5,9 +5,11 @@ const imageUrl = require('config').get('image').url
 
 //register user
 const buildUser = async(model, context) => {
-    const { status, fullname, country, address, otp, state, city, zipCode, phoneNumber, email, password, roleId, } = model;
+    const { platform, socialLinkId, status, fullname, country, address, otp, state, city, zipCode, phoneNumber, email, password, roleId, } = model;
     const log = context.logger.start(`services:users:build${model}`);
     const user = await new db.user({
+        socialLinkId: socialLinkId,
+        platform: platform,
         fullname: fullname,
         phoneNumber: phoneNumber,
         email: email,
@@ -372,6 +374,42 @@ const uploadImage = async (files, body, context) => {
     return user
 };
 
+const socialLink = async(model, context) => {
+    const log = context.logger.start("services:users:socialLink");
+
+    if (model.socialLinkId == "string" || model.socialLinkId == undefined) {
+        throw new Error("SocialLinkId is requried");
+    }
+    if (model.email == "string" || model.email == undefined) {
+        throw new Error("email is requried");
+    }
+    if (model.fullname == "string" || model.fullname == undefined) {
+        throw new Error("fullname is requried");
+    }
+    let user = await db.user.findOne({ socialLinkId: model.socialLinkId });
+    if (!user) {
+        const userEmail = await db.user.findOne({ email: { $eq: model.email } });
+        if(userEmail){
+            throw new Error("Choose another email");
+        }
+        const createdUser = await buildUser(model, context);
+        const token = auth.getToken(createdUser.id, false, context);
+        createdUser.token = token;
+        createdUser.save();
+        log.end();
+        return createdUser;
+    }else{
+        const token = auth.getToken(user.id, false, context);
+        user.token = token;
+        user.deviceToken = model.deviceToken;
+        user.platform = model.platform;
+        user.updatedOn = new Date();
+        user.save();
+        log.end();
+        return user;
+    }
+};
+
 exports.login = login;
 exports.create = create;
 exports.search = search;
@@ -386,3 +424,4 @@ exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
 exports.newPassword = newPassword;
 exports.adminlogin = adminlogin;
 exports.uploadImage = uploadImage;
+exports.socialLink = socialLink;
