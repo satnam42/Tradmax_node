@@ -73,7 +73,7 @@ const updateStatus = async (model, context) => {
             log.end();
             return order;
         }else if(model.type == 'D'){
-            order.status = "Delievered"
+            order.status = "Delivered"
             await order.save();
             log.end();
             return order;
