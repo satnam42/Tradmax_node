@@ -1,11 +1,10 @@
 module.exports = [
-
     {
-        name: "getCategories",
+        name: "newPassword",
         properties: {
-            category_id: {
+            newPassword: {
                 type: "string"
-            }
+            },
         }
     }
 ];

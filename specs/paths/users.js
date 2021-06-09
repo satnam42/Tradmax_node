@@ -22,6 +22,29 @@ module.exports = [{
         }
     },
     {
+        url: "/socialLink",
+        post: {
+            summary: "Login user with socialLink",
+            description: "user login into system with socialLink and get its token to access apis",
+            parameters: [{ in: "body",
+                name: "body",
+                description: "Model of login user with socialLink",
+                required: true,
+                schema: {
+                    $ref: "#/definitions/socialLink"
+                }
+            }],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
         url: "/adminlogin",
         post: {
             summary: "Admin Login",
@@ -105,7 +128,6 @@ module.exports = [{
         }
     },
 
-
     {
         url: "/otpVerifyAndChangePassword",
         post: {
@@ -123,6 +145,37 @@ module.exports = [{
                     required: true,
                     schema: {
                         $ref: "#/definitions/verifyOtp"
+                    }
+                }
+            ],
+            responses: {
+                default: {
+                    description: "Unexpected error",
+                    schema: {
+                        $ref: "#/definitions/Error"
+                    }
+                }
+            }
+        }
+    },
+    {
+        url: "/newPassword",
+        put: {
+            summary: "Set New Password",
+            description: "Set new Password",
+            parameters: [{ in: "header",
+                    name: "x-access-token",
+                    description: "token to access api",
+                    required: true,
+                    type: "string"
+                },
+
+                { in: "body",
+                    name: "body",
+                    description: "Model of newPassword",
+                    required: true,
+                    schema: {
+                        $ref: "#/definitions/newPassword"
                     }
                 }
             ],
@@ -171,7 +224,19 @@ module.exports = [{
                     description: "token to access api",
                     required: false,
                     type: "string"
-                },
+                }, {
+                    in: 'query',
+                    type: "integer",
+                    name: 'pageNo',
+                    description: 'pageNo',
+                    required: true,
+                }, {
+                    in: 'query',
+                    type: "integer",
+                    name: 'pageSize',
+                    description: 'pageSize',
+                    required: true,
+                }
             ],
             responses: {
                 default: {
@@ -253,7 +318,7 @@ module.exports = [{
                     in: "header",
                     name: "x-access-token",
                     description: "token to access api",
-                    required: true,
+                    required: false,
                     type: "string"
                 },
                 {
@@ -283,25 +348,53 @@ module.exports = [{
             }
         }
     },
+    // {
+    //     url: "/uploadProfilePic/{id}",
+    //     put: {
+    //         summary: "upload Profile Pic ",
+    //         description: "upload Profile Pic ",
+    //         parameters: [{
+    //             in: "formData",
+    //             name: "image",
+    //             type: "file",
+    //             description: "The file to upload.",
+    //             required: true,
+    //         },
+    //         {
+    //             in: "path",
+    //             type: "string",
+    //             name: "id",
+    //             description: "user id",
+    //             required: true
+    //         }
+    //         ],
+    //         responses: {
+    //             default: {
+    //                 description: "Unexpected error",
+    //                 schema: {
+    //                     $ref: "#/definitions/Error"
+    //                 }
+    //             }
+    //         }
+    //     }
+    // },
     {
-        url: "/uploadProfilePic/{id}",
-        put: {
-            summary: "upload Profile Pic ",
-            description: "upload Profile Pic ",
-            parameters: [{
-                in: "formData",
-                name: "image",
-                type: "file",
-                description: "The file to upload.",
-                required: true,
-            },
-            {
-                in: "path",
-                type: "string",
-                name: "id",
-                description: "user id",
-                required: true
-            }
+        url: "/uploadImage",
+        post: {
+            summary: "uploadImage",
+            description: "uploadImage",
+            parameters: [{ in: "formData",
+                    type: "string",
+                    name: "id",
+                    description: "User Id",
+                    required: true
+                },
+                { in: "formData",
+                    name: "file",
+                    type: "file",
+                    description: "The Signature file to upload.",
+                    required: true
+                },
             ],
             responses: {
                 default: {
@@ -312,5 +405,5 @@ module.exports = [{
                 }
             }
         }
-    }
+    },
 ];

@@ -4,8 +4,8 @@ const success = (res, message, data) => {
   res.status(200).json({
     isSuccess: true,
     statusCode: 200,
-    data: data,
-    message: message
+    message: message,
+    data: data
   });
 };
 
@@ -13,7 +13,8 @@ const failure = (res, message) => {
   res.status(400).json({
     isSuccess: false,
     statusCode: 400,
-    error: message
+    message: message,
+    // data: Object.assign({}, [])
   });
 };
 
@@ -21,7 +22,7 @@ const unAuthorized = (res, message) => {
   res.status(401).json({
     isSuccess: false,
     statusCode: 401,
-    error: message
+    message: message
   });
 };
 
@@ -34,8 +35,9 @@ const data = (res, message, data) => {
   });
 };
 
-const page = (res, data, pageNo, pageSize, total) => {
+const page = (message, res, data, pageNo, pageSize, total) => {
   res.status(200).json({
+    message: message,
     isSuccess: true,
     statusCode: 200,
     pageNo: pageNo,

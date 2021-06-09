@@ -1,11 +1,15 @@
 const encrypt = require("../permit/crypto.js");
 const auth = require("../permit/auth");
 var nodemailer = require('nodemailer')
+const imageUrl = require('config').get('image').url
+
 //register user
 const buildUser = async(model, context) => {
-    const { status, fullname, country, address, otp, state, city, zipCode, phoneNumber, email, password, roleId, } = model;
+    const { platform, socialLinkId, status, fullname, country, address, otp, state, city, zipCode, phoneNumber, email, password, roleId, } = model;
     const log = context.logger.start(`services:users:build${model}`);
     const user = await new db.user({
+        socialLinkId: socialLinkId,
+        platform: platform,
         fullname: fullname,
         phoneNumber: phoneNumber,
         email: email,
@@ -147,7 +151,7 @@ const changePassword = async(id, model, context) => {
     if (!id) {
         throw new Error("user id is required");
     }
-    let user = await db.user.findById(id).populate('image');
+    let user = await db.user.findById(id);
     if (!user) {
         log.end();
         throw new Error("user is not found");
@@ -176,8 +180,13 @@ const changePassword = async(id, model, context) => {
 // getUsers
 const getUsers = async(query, context) => {
     const log = context.logger.start(`services:users:getUsers`);
-    let allUsers = await db.user.find();
-    allUsers.count = await db.user.find().count();
+    let pageNo = Number(query.pageNo) || 1
+    let pageSize = Number(query.pageSize) || 10
+
+    let skipCount = pageSize * (pageNo - 1)
+    // let allUsers = await db.user.find().skip(skipCount).limit(pageSize);
+    const allUsers = await db.user.find().sort({ _id: 1 }).skip(skipCount).limit(pageSize)
+    // allUsers.count = await db.user.find().count();
     log.end();
     return allUsers;
 };
@@ -214,7 +223,7 @@ const deleteUser = async(id, context) => {
 
 const update = async(id, model, context) => {
     const log = context.logger.start(`services:users:update`);
-    let entity = await db.user.findById(id).populate('image');
+    let entity = await db.user.findById(id);
     if (!entity) {
         throw new Error("invalid user");
     }
@@ -242,7 +251,7 @@ const sendOtp = async(user, context) => {
     }
     let message = `hi ${user.firstName} Your 4 digit One Time Password: <br>${OTP}<br></br>
       otp valid only 4 minutes`
-    let = subject = "One Time Password"
+    let subject = "One Time Password"
     const isEmailSent = await sendMail(user.email, message, subject)
     if (!isEmailSent) {
         throw new Error('something went wrong')
@@ -262,7 +271,7 @@ const otpVerifyAndChangePassword = async(model, token, context) => {
     const otpDetail = await auth.extractToken(token, context)
 
     if (otpDetail.otp !== undefined && otpDetail.otp != model.otp) {
-        throw new Error("please enter valid otp");;
+        throw new Error("please enter valid otp");
     }
     if (otpDetail.otp.name === "TokenExpiredError") {
         throw new Error("otp expired");
@@ -270,7 +279,18 @@ const otpVerifyAndChangePassword = async(model, token, context) => {
     if (otpDetail.otp.name === "JsonWebTokenError") {
         throw new Error("otp is invalid");
     }
-    let user = context.user
+    let user = context.user;
+    user = await db.user.findById(user.id);
+    if (!user) {
+        throw new Error("user not found");
+    }
+    log.end();
+    return;
+}
+
+const newPassword = async(model, context) => {
+    const log = context.logger.start('services/users/newPassword')
+    let user = context.user;
     user = await db.user.findById(user.id);
     if (!user) {
         throw new Error("user not found");
@@ -282,8 +302,7 @@ const otpVerifyAndChangePassword = async(model, token, context) => {
     await user.save();
     log.end();
 
-    log.end()
-    return
+    return;
 }
 
 // forgetPassword
@@ -297,9 +316,9 @@ const forgotPassword = async(model, context) => {
     if (!data) {
         throw new Error('something went wrong')
     }
-    log.end()
+    log.end();
 
-    return data
+    return data;
 }
 
 const sendMail = async(email, message, subject) => {
@@ -307,7 +326,7 @@ const sendMail = async(email, message, subject) => {
         service: 'Gmail',
         auth: {
             user: `emmieandrewwork@gmail.com`,
-            pass: `Notsure%1`
+            pass: `lhbxxjikhpslyxvu`
         }
     });
     // email send to registered email
@@ -329,6 +348,68 @@ const sendMail = async(email, message, subject) => {
     }
 }
 
+const uploadImage = async (files, body, context) => {
+    const log = context.logger.start(`services:users:uploadImage`);
+    if (!files) {
+        throw new Error("image not found");
+    }
+    let user = await db.user.findById(body.id);
+    if (!user) {
+        throw new Error("user not found");
+    }
+    if (user.image != "" && user.image !== undefined) {
+
+        let picUrl = user.image.replace(`${imageUrl}`, '');
+        try {
+            await fs.unlinkSync(`${picUrl}`)
+            console.log('File unlinked!');
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    const image = imageUrl + 'assets/images/' + files[0].filename
+    user.image = image
+    await user.save();
+    log.end();
+    return user
+};
+
+const socialLink = async(model, context) => {
+    const log = context.logger.start("services:users:socialLink");
+
+    if (model.socialLinkId == "string" || model.socialLinkId == undefined) {
+        throw new Error("SocialLinkId is requried");
+    }
+    if (model.email == "string" || model.email == undefined) {
+        throw new Error("email is requried");
+    }
+    if (model.fullname == "string" || model.fullname == undefined) {
+        throw new Error("fullname is requried");
+    }
+    let user = await db.user.findOne({ socialLinkId: model.socialLinkId });
+    if (!user) {
+        const userEmail = await db.user.findOne({ email: { $eq: model.email } });
+        if(userEmail){
+            throw new Error("Choose another email");
+        }
+        const createdUser = await buildUser(model, context);
+        const token = auth.getToken(createdUser.id, false, context);
+        createdUser.token = token;
+        createdUser.save();
+        log.end();
+        return createdUser;
+    }else{
+        const token = auth.getToken(user.id, false, context);
+        user.token = token;
+        user.deviceToken = model.deviceToken;
+        user.platform = model.platform;
+        user.updatedOn = new Date();
+        user.save();
+        log.end();
+        return user;
+    }
+};
+
 exports.login = login;
 exports.create = create;
 exports.search = search;
@@ -340,5 +421,7 @@ exports.deleteUser = deleteUser;
 exports.update = update;
 exports.sendOtp = sendOtp;
 exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
+exports.newPassword = newPassword;
 exports.adminlogin = adminlogin;
-// exports.uploadProfilePic = uploadProfilePic;
+exports.uploadImage = uploadImage;
+exports.socialLink = socialLink;

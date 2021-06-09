@@ -20,6 +20,29 @@ const create = (req, res, next) => {
     return next();
 };
 
+const social = (req, res, next) => {
+    const log = req.context.logger.start("validators:users:social");
+
+    if (Object.keys(req.body).length === 0 && req.body.constructor === Object) {
+        log.end();
+        return response.failure(res, "body is required");
+    }
+    if (!req.body.socialLinkId) {
+        log.end();
+        return response.failure(res, "socialLinkId is required");
+    }
+    if (!req.body.email) {
+        log.end();
+        return response.failure(res, "email is required");
+    }
+    if (!req.body.fullname) {
+        log.end();
+        return response.failure(res, "fullname is required");
+    }
+    log.end();
+    return next();
+};
+
 const login = (req, res, next) => {
     const log = req.context.logger.start("validators:users:login");
 
@@ -71,6 +94,7 @@ const update = (req, res, next) => {
 };
 
 exports.login = login;
+exports.social = social;
 exports.create = create;
 exports.update = update;
 exports.changePassword = changePassword;

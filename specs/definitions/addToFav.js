@@ -1,11 +1,14 @@
 module.exports = [
     {
-        name: "verifyOtp",
+        name: "addToFav",
         properties: {
-            otp: {
+            userId: {
                 type: "string"
             },
-            // newPassword: {
+            productId: {
+                type: "string"
+            },
+            // variation: {
             //     type: "string"
             // },
         }

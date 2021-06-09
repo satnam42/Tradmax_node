@@ -80,10 +80,11 @@ const changePassword = async (req, res) => {
 const getUsers = async (req, res) => {
     const log = req.context.logger.start(`api:users:getUsers`);
     try {
-        const user = await service.getUsers(req.body, req.context);
+        const user = await service.getUsers(req.query, req.context);
         const message = "Users get Successfully";
         log.end();
-        return response.success(res, message, userMapper.toSearchModel(user));
+        return response.page(message,res, userMapper.toSearchModel(user), Number(req.query.pageNo) || 1, Number(req.query.pageSize) || 10, user.count)
+        // return response.success(res, message, userMapper.toSearchModel(user));
     } catch (err) {
         log.error(err);
         log.end();
@@ -98,7 +99,7 @@ const deleteUser = async (req, res) => {
         const user = await service.deleteUser(req.params.id, req.context);
         const message = "User Deleted Successfully";
         log.end();
-        return response.data(res, message, user);
+        return response.data(res, message);
     } catch (err) {
         log.error(err);
         log.end();
@@ -126,9 +127,23 @@ const otpVerifyAndChangePassword = async (req, res) => {
     const log = req.context.logger.start("api:users:otpVerify");
     try {
         const data = await service.otpVerifyAndChangePassword(req.body, req.headers["x-access-token"], req.context);
-        const message = "Password Updated Successfully"
-        log.end();
+        const message = "Otp verified"
+        log.end()
         return response.success(res, message, data);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
+const newPassword = async (req, res) => {
+    const log = req.context.logger.start("api:users:newPassword");
+    try {
+        const data = await service.newPassword(req.body, req.context);
+        const message = "Password Updated"
+        log.end();
+        return response.success(res, message);
     } catch (err) {
         log.error(err);
         log.end();
@@ -164,6 +179,33 @@ const search = async (req, res) => {
     }
 };
 
+const uploadImage = async (req, res) => {
+    const log = req.context.logger.start(`api:users:uploadImage`);
+    try {
+        const url = await service.uploadImage(req.files, req.body, req.context);
+        const message = "Image uploaded";
+        log.end();
+        return response.data(res, message, url);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
+
+const socialLink = async(req, res) => {
+    const log = req.context.logger.start("api:users:socialLink");
+    try {
+        const user = await service.socialLink(req.body, req.context);
+        const message = "Register successful"
+        log.end();
+        return response.authorized(res, message, user);
+    } catch (err) {
+        log.error(err);
+        log.end();
+        return response.failure(res, err.message);
+    }
+};
 
 exports.login = login;
 exports.create = create;
@@ -175,5 +217,7 @@ exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;
 exports.update = update;
 exports.otpVerifyAndChangePassword = otpVerifyAndChangePassword;
+exports.newPassword = newPassword;
 exports.adminlogin = adminlogin;
-// exports.uploadProfilePic = uploadProfilePic;
+exports.uploadImage = uploadImage;
+exports.socialLink = socialLink;

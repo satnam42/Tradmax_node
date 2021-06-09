@@ -17,18 +17,17 @@ exports.toModel = entity => {
         country: entity.country,
         zipCode: entity.zipCode,
         token: entity.token,
-        status: entity.status,
         sex: entity.sex,
         deviceToken: entity.deviceToken,
-        avatar: entity.image ? `${imageUrl}${entity.image.image}` : ""
+        image: entity.image ? entity.image : ""
     };
 
-    if (entity.image && entity.image.gallery && entity.image.gallery.length > 0) {
-        for (let index = 0; index < entity.image.gallery.length; index++) {
-            entity.image.gallery[index].image = `${imageUrl}${entity.image.gallery[index].image}`;
-        }
-        model.gallery = entity.image.gallery
-    }
+    // if (entity.image && entity.image.gallery && entity.image.gallery.length > 0) {
+    //     for (let index = 0; index < entity.image.gallery.length; index++) {
+    //         entity.image.gallery[index].image = `${imageUrl}${entity.image.gallery[index].image}`;
+    //     }
+    //     model.gallery = entity.image.gallery
+    // }
 
     return model;
 

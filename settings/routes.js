@@ -4,6 +4,8 @@ const fs = require("fs");
 const api = require("../api");
 const specs = require("../specs");
 const permit = require("../permit")
+const path = require("path");
+const express = require("express");
 const validator = require("../validators");
 
 const configure = (app, logger) => {
@@ -26,17 +28,18 @@ const configure = (app, logger) => {
         res.contentType("application/json");
         res.send(specs.get());
     });
+
     ////react js project setup////
-    // const root = path.join(__dirname, '../../startupbundle_bin_reactjs/', 'build')
+    const root = path.join(__dirname, '../../trademax_admin_react/', 'build')
 
-    // app.use(express.static(root));
+    app.use(express.static(root));
 
-    // app.get('/*', function(req, res, next) {
-    //     if (!req.path.includes('api')) {
+    app.get('/*', function(req, res, next) {
+        if (!req.path.includes('api')) {
 
-    //         res.sendFile('index.html', { root });
-    //     } else next();
-    // });
+            res.sendFile('index.html', { root });
+        } else next();
+    });
 
 
     //user api's //
@@ -100,7 +103,7 @@ const configure = (app, logger) => {
 
     app.put(
         "/api/users/update/:id",
-        permit.context.validateToken,
+        permit.context.builder,
         validator.users.update,
         api.users.update
     );
@@ -110,6 +113,25 @@ const configure = (app, logger) => {
         "/api/users/otpVerifyAndChangePassword",
         permit.context.validateToken,
         api.users.otpVerifyAndChangePassword
+    );
+
+    app.put(
+        "/api/users/newPassword",
+        permit.context.validateToken,
+        api.users.newPassword
+    );
+
+    app.post(
+        '/api/users/uploadImage',
+        permit.context.builder,
+        api.users.uploadImage
+    );
+
+    app.post(
+        "/api/users/socialLink",
+        permit.context.builder,
+        validator.users.social,
+        api.users.socialLink
     );
 
     //role api's //
@@ -133,45 +155,6 @@ const configure = (app, logger) => {
         api.roles.deleteRole
     );
 
-    // //admins api's //
-    // app.post(
-    //     "/api/admins/create",
-    //     permit.context.builder,
-    //     validator.admins.create,
-    //     api.admins.create
-    // );
-
-    // app.post(
-    //     "/api/admins/login",
-    //     permit.context.builder,
-    //     validator.admins.login,
-    //     api.admins.login
-    // );
-
-    // app.put(
-    //     "/api/admins/changePassword/:id",
-    //     permit.context.validateToken,
-    //     validator.admins.changePassword,
-    //     api.admins.changePassword,
-    // );
-    // app.put(
-    //     "/api/admins/update/:id",
-    //     permit.context.validateToken,
-    //     api.admins.update,
-    // );
-
-    // app.get(
-    //     "/api/admins/getAdmins",
-    //     permit.context.validateToken,
-    //     api.admins.getAdmins
-    // );
-
-    // app.delete(
-    //     "/api/admins/delete/:id",
-    //     permit.context.validateToken,
-    //     api.admins.deleteAdmin
-    // );
-
     //// consversations api's ////
 
     app.get(
@@ -182,57 +165,42 @@ const configure = (app, logger) => {
 
     //// images  ////
 
-    app.post(
-        '/api/images/uploadSingle',
-        permit.context.builder,
-        validator.images.upload,
-        api.images.uploadSingle
-    );
+    // app.post(
+    //     '/api/images/uploadSingle',
+    //     permit.context.builder,
+    //     validator.images.upload,
+    //     api.images.uploadSingle
+    // );
+
+    // app.post(
+    //     '/api/images/uploadMultiple',
+    //     permit.context.builder,
+    //     validator.images.upload,
+    //     api.images.uploadMultiple
+    // );
+
+    // app.put(
+    //     '/api/images/remove',
+    //     permit.context.builder,
+    //     api.images.remove
+    // );
+
+    /* Banner Section */
 
     app.post(
-        '/api/images/uploadMultiple',
+        "/api/banners/createBanner",
         permit.context.builder,
-        validator.images.upload,
-        api.images.uploadMultiple
-    );
-
-    app.put(
-        '/api/images/remove',
-        permit.context.builder,
-        api.images.remove
-    );
-
-    ///////////////event api's /////////////////
-
-    app.post(
-        "/api/events/add",
-        permit.context.builder,
-        api.events.create
+        api.banners.createBanner
     );
 
     app.get(
-        "/api/events/listByUserId/:id",
+        "/api/banners/getBanners",
         permit.context.builder,
-        api.events.listByUserId
-    );
-    app.get(
-        "/api/events/list",
-        permit.context.builder,
-        api.events.list
-    );
-    app.put(
-        "/api/events/update/:id",
-        permit.context.builder,
-        api.events.update
-    );
-
-    app.delete(
-        "/api/events/delete/:id",
-        permit.context.builder,
-        api.events.remove
+        api.banners.getBanners
     );
     
     /* Category Section */
+
     app.post(
         "/api/categories/createCategory",
         permit.context.builder,
@@ -258,6 +226,12 @@ const configure = (app, logger) => {
     );
 
     /* Products Section */
+
+    app.post(
+        "/api/products/search",
+        permit.context.validateToken,
+        api.products.search
+    );
     
     app.post(
         "/api/products/addProduct",
@@ -266,11 +240,122 @@ const configure = (app, logger) => {
     );
 
     app.put(
-        "/api/products/uploadImage/:id",
-        permit.context.builder, 
-        // upload.single('image'),
-        api.products.uploadProductImage
+        "/api/products/update/:id",
+        permit.context.builder,
+        // validator.users.update, 
+        api.products.update
     );
+
+    app.get(
+        "/api/products/getAllProducts",
+        permit.context.builder,
+        // validator.users.create, 
+        api.products.getAllProducts
+    );
+
+    app.get(
+        "/api/products/productsBySubCategories",
+        permit.context.builder,
+        // validator.users.create, 
+        api.products.productsBySubCategories
+    );
+
+    app.get(
+        "/api/products/similarProducts",
+        permit.context.builder,
+        // validator.users.create, 
+        api.products.similarProducts
+    );
+
+    app.put(
+        '/api/products/uploadProductFiles/:id',
+        permit.context.builder,
+        // validator.products.upload,
+        api.products.uploadProductFiles
+    );
+
+    app.post(
+        "/api/products/filterProducts",
+        permit.context.builder,
+        api.products.filterProducts
+    );
+
+    app.delete(
+        "/api/products/deleteProduct/:id",
+        permit.context.builder,
+        api.products.deleteProduct
+    );
+
+    /* Cart Section */
+    
+    app.post(
+        "/api/carts/addToCart",
+        permit.context.builder,
+        api.carts.create
+    );
+
+    app.post(
+        "/api/carts/addToFav",
+        permit.context.builder,
+        api.carts.addToFav
+    );
+
+    app.get(
+        "/api/carts/getFav",
+        permit.context.builder,
+        api.carts.getFav
+    );
+
+    app.get(
+        "/api/carts/getCarts",
+        permit.context.builder,
+        api.carts.getCarts
+    );
+
+    app.delete(
+        "/api/carts/deleteItem/:id",
+        permit.context.builder,
+        api.carts.deleteItem
+    );
+
+    app.post(
+        "/api/carts/addAddress",
+        permit.context.builder,
+        api.carts.addAddress
+    );
+
+    app.post(
+        "/api/carts/getAddress",
+        permit.context.builder,
+        api.carts.getAddress
+    );
+
+    /* Orders Section */
+    
+    app.post(
+        "/api/orders/placeOrder",
+        permit.context.builder,
+        api.orders.placeOrder
+    );
+
+    app.get(
+        "/api/orders/getOrder",
+        permit.context.builder,
+        api.orders.getOrder
+    );
+
+    app.post(
+        "/api/orders/updateStatus",
+        permit.context.builder,
+        api.orders.updateStatus
+    );
+
+    app.get(
+        "/api/orders/getAllOrders",
+        permit.context.builder,
+        api.orders.getAllOrders
+    );
+    
 
     ///////////////notifications api's /////////////////
     // app.get(
@@ -284,6 +369,7 @@ const configure = (app, logger) => {
     //     permit.context.validateToken,
     //     api.notifications.list
     // );
+
     log.end();
 };
 

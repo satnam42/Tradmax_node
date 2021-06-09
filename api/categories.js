@@ -34,7 +34,7 @@ const getCategories = async (req, res) => {
     const log = req.context.logger.start(`api:categories:getCategories`);
     try {
         const categories = await service.getCategories(req.body, req.context);
-        const message = "categories fetched Successfully";
+        const message = "categories feched Successfully";
         log.end();
         return response.data(res, message, categories);
     } catch (err) {

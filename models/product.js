@@ -14,7 +14,7 @@ const product = mongoose.Schema({
     },
     status: {
         type: String, default: "active",
-        enum: ["active", "inActive", "out of stock"]
+        enum: ["active", "inactive", "out of stock"]
     },
     subCategory: {
         id: {
@@ -24,8 +24,15 @@ const product = mongoose.Schema({
         name: { type: String, default: "" }
     },
     description: { type: String, required: true },
-    // price: { type: String, required: true },
+    price: { type: Number, required: true },
+    content: { type: String, required: true },
     image: { type: String },
+    isLiked: { type: Boolean, default: false },
+    likeCount: { type: String, default: "0" },
+    productFiles: [{
+        url : {type: String, default: ""},
+        type: {type: String, default: ""} 
+    }],
     createdOn: { type: Date, default: Date.now },
     updatedOn: { type: Date, default: Date.now }
 });
