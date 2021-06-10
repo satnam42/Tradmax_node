@@ -46,17 +46,19 @@ module.exports = [{
                     name: "pageSize",
                     description: "pageSize",
                     required: false
-                },{
-                    in: "query",
-                    type: "integer",
-                    name: "pageSort",
-                    description: "pass 1 for oldest and -1 for newest",
-                    required: false
-                },{
+                },
+                // {
+                //     in: "query",
+                //     type: "integer",
+                //     name: "pageSort",
+                //     description: "pass 1 for oldest and -1 for newest",
+                //     required: false
+                // },
+                {
                     in: "query",
                     type: "integer",
                     name: "priceSort",
-                    description: "low to high OR high to low",
+                    description: "Pass low for low to high and high for high to low and blank for newest",
                     required: false
                 },
                 {

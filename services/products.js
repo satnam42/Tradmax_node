@@ -25,11 +25,11 @@ const set = async (model, product, context) => {
     if (model.description !== "string" && model.description !== undefined) {
         product.description = model.description;
     }
-    
+
     if (model.content !== "string" && model.content !== undefined) {
         product.content = model.content;
     }
-    
+
     if (model.units !== "string" && model.units !== undefined) {
         product.units = model.units;
     }
@@ -96,14 +96,23 @@ const productsBySubCategories = async (query, context) => {
     let pageNo = Number(query.pageNo) || 1;
     let pageSize = Number(query.pageSize) || 10;
     let skipCount = pageSize * (pageNo - 1);
-    let pageSort = Number(query.pageSort) || 1;
-    let priceSort = Number(query.priceSort) || 1;
-    const products = await db.product.find({ "subCategory.id": query.subCategoryId }).skip(skipCount).limit(pageSize).sort({ _id: pageSort , price: priceSort } );
+    let popular = query.pageSize
+    let price = query.priceSort
+    let sort
+    if (price === 'low') {
+        sort = { price: -price }
+    } else if (price === 'high') {
+        sort = { price: -1 }
+    }else {
+        sort = { _id: -1 }
+    }
+
+    const products = await db.product.find({ "subCategory.id": query.subCategoryId }).skip(skipCount).limit(pageSize).sort(sort);
 
     const product = [];
     for (let element of products) {
         let pId = element._id.toString();
-        let likesLs = await db.favorite.find({ user: { $eq: query.userId } ,product: { $eq: pId } });
+        let likesLs = await db.favorite.find({ user: { $eq: query.userId }, product: { $eq: pId } });
         let likes = await db.favorite.find({ product: { $eq: pId } });
         element.likeCount = likes.length;
         likesLs.forEach(like => {
@@ -128,7 +137,7 @@ const getAllProducts = async (query, context) => {
     const product = [];
     for (let element of products) {
         let pId = element._id.toString();
-        let likesLs = await db.favorite.find({ user: { $eq: query.userId } ,product: { $eq: pId } });
+        let likesLs = await db.favorite.find({ user: { $eq: query.userId }, product: { $eq: pId } });
         let likes = await db.favorite.find({ product: { $eq: pId } });
         element.likeCount = likes.length;
         likesLs.forEach(like => {
@@ -178,7 +187,7 @@ const deleteProduct = async (id, context) => {
     return isProductExists
 };
 
-const uploadProductFiles = async(id, files, model, context) => {
+const uploadProductFiles = async (id, files, model, context) => {
     const log = context.logger.start(`services:products:uploadProductFiles`);
     let product = await db.product.findById(id);
     if (!files) {
@@ -187,24 +196,24 @@ const uploadProductFiles = async(id, files, model, context) => {
     if (!product) {
         throw new Error("product not found!!");
     }
-    if(!product.productFiles){
+    if (!product.productFiles) {
 
         const uploadfile = []
-        for(let file of files){
+        for (let file of files) {
             const avatar = imageUrl + 'assets/images/' + file.filename
             let fileType = file.mimetype.split('/')[0]
-            uploadfile.push({ url : avatar, type: fileType})
+            uploadfile.push({ url: avatar, type: fileType })
         }
         product.productFiles = uploadfile
         await product.save();
         log.end();
         return product
 
-    }else{
-        for(let file of files){
+    } else {
+        for (let file of files) {
             const avatar = imageUrl + 'assets/images/' + file.filename
             let fileType = file.mimetype.split('/')[0]
-            product.productFiles =  product.productFiles.concat({ url : avatar, type: fileType})
+            product.productFiles = product.productFiles.concat({ url: avatar, type: fileType })
         }
         await product.save();
         log.end();
@@ -213,7 +222,7 @@ const uploadProductFiles = async(id, files, model, context) => {
 
 };
 
-const filterProducts = async(model, context) => {
+const filterProducts = async (model, context) => {
     const log = context.logger.start(`services:products:filterProducts`);
 
     let minPrice = model.minPrice
@@ -221,21 +230,21 @@ const filterProducts = async(model, context) => {
     const query = {}
 
     if (model.minPrice && model.maxPrice) {
-        query.price = { $gte: Number(minPrice) ,$lte:Number(maxPrice)}
+        query.price = { $gte: Number(minPrice), $lte: Number(maxPrice) }
     }
 
     if (model.size) {
-        query["variation.items"] =  { $elemMatch: { value: model.size } }
+        query["variation.items"] = { $elemMatch: { value: model.size } }
     }
 
     if (model.color) {
-        query["variation.items"] =  { $elemMatch: { value: model.color } }
+        query["variation.items"] = { $elemMatch: { value: model.color } }
     }
 
     const products = db.product.find(query);
-    
-    
-    
+
+
+
     // find(
     //     {
     //         "$or": [
@@ -256,17 +265,17 @@ const filterProducts = async(model, context) => {
     // status: { $eq: 'active' }
 };
 
-const search = async(query, context) => {
-    if(query.searchType == 'product'){
+const search = async (query, context) => {
+    if (query.searchType == 'product') {
         let user = context.user;
         let allproduct = await db.product.find({
             $or: [{
                 "name": query.search
-            },{
+            }, {
                 "description": query.search
-            },{
+            }, {
                 "price": query.search
-            },{
+            }, {
                 "subCategory.name": query.search
             }],
         });
@@ -275,7 +284,7 @@ const search = async(query, context) => {
         const product = [];
         for (let element of allproduct) {
             let pId = element._id.toString();
-            let likesLs = await db.favorite.find({ user: { $eq: ObjectId(user.id) } ,product: { $eq: pId } });
+            let likesLs = await db.favorite.find({ user: { $eq: ObjectId(user.id) }, product: { $eq: pId } });
             let likes = await db.favorite.find({ product: { $eq: pId } });
             element.likeCount = likes.length;
             likesLs.forEach(like => {
@@ -289,7 +298,7 @@ const search = async(query, context) => {
         }
         return allproduct;
     }
-    else if(query.searchType == 'category'){
+    else if (query.searchType == 'category') {
         let allproduct = await db.category.find({
             $or: [{
                 "name": query.search
