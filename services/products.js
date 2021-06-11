@@ -269,15 +269,22 @@ const search = async (query, context) => {
     if (query.searchType == 'product') {
         let user = context.user;
         let allproduct = await db.product.find({
-            $or: [{
-                "name": query.search
-            }, {
-                "description": query.search
-            }, {
-                "price": query.search
-            }, {
-                "subCategory.name": query.search
-            }],
+            $or: 
+            [
+                {"name": {
+                        $regex: '^' + query.search,
+                        $options: 'i'
+                    }
+                }, 
+                {"description": {
+                    $regex: '^' + query.search,
+                    $options: 'i'
+                }},
+                {"subCategory.name": {
+                    $regex: '^' + query.search,
+                    $options: 'i'
+                }}
+            ],
         });
         const log = context.logger.start(`services:products:search`);
         log.end();
@@ -301,7 +308,10 @@ const search = async (query, context) => {
     else if (query.searchType == 'category') {
         let allproduct = await db.category.find({
             $or: [{
-                "name": query.search
+                "name": {
+                    $regex: '^' + query.search,
+                    $options: 'i'
+                }
             }],
         });
         const log = context.logger.start(`services:products:search`);
