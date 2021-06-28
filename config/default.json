@@ -12,8 +12,8 @@
         "port": 4604
     },
     "stripe": {
-        "public": "pk_test_51IOjFUH8FPQioJubHEprnHOrA1QyKEOiokB8Ji4RlM10MUzMwzi00OGfiTonBvA0WEyYV8e6tb6O0OCi0gt0AbhX00Wpdi68ZY",
-        "private": "sk_test_51IOjFUH8FPQioJub18IPEv5DPlsdFM7L90iLaGQhsf4MfIEQYMAnJSo2KIYJbGqS68oeBn8Ndc04m10pgnPeP6Hx00DOSxb8t7"
+        "public": "pk_test_51J7Hz6GNDoxR4dRyOO1zNMFOmrcVo2VBsz3rH9MAzJ4ywQqDt58j3ekVa8z31URvsvFcGzOXiEvhQJid9rmbUrlQ00qFZBn6n2",
+        "private": "sk_test_51J7Hz6GNDoxR4dRy4DcePJT3nLC7p3rY3iCjmv6uY0wD6q6vTpb82rrzNjK63sGKHuHKd6hgZlooKnolwP06xToH00nxdsgGN9"
     },
     "auth": {
         "jwtKey": "supersecret"

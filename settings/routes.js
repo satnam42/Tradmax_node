@@ -370,6 +370,14 @@ const configure = (app, logger) => {
     //     api.notifications.list
     // );
 
+    /* payment */
+
+    app.post(
+        "/api/transactions/create",
+        permit.context.builder,
+        api.transactions.create
+    );
+
     log.end();
 };
 

@@ -1,20 +1,18 @@
-
-
 "use strict";
 
 const sk = require('config').get('stripe').private
-console.log('sk', sk)
+// console.log('sk', sk)
 const stripe = require('stripe')(sk)
-
 
 const buildTransaction = async (model, context) => {
     const log = context.logger.start(`services:transactions:buildTransaction${model}`);
     const transaction = await new db.transaction({
-        paymentId: model.id,
-        receiptUrl: model.receipt_url,
+        // paymentId: model.paymentId,
+        product: model.productId,
+        receiptUrl: '',
         amount: model.amount,
-        status: model.status,
-        user: context.user._id,
+        status: 'Paid',
+        user: context._id,
     }).save();
     log.end();
     return transaction;
@@ -24,7 +22,7 @@ const create = async (model, context) => {
     const log = context.logger.start("services:transactions:create");
     const charge = await stripe.charges.create({
         amount: model.amount,
-        currency: 'inr',
+        currency: 'USD',
         source: model.source,
     });
     const transaction = buildTransaction(charge, context);
