@@ -43,6 +43,13 @@ const init = async() => {
     await require("./settings/express").configure(app, logger);
     await require("./settings/routes").configure(app, logger);
     boot();
+    app.get('/privacy', function(req, res) {
+        res.sendFile(__dirname + '/templates/privacy.html'); // replace /public with your directory
+    });
+    
+    app.get('/terms', function(req, res) {
+        res.sendFile(__dirname + '/templates/terms.html'); // replace /public with your directory
+    });
 };
 
 init();

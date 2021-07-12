@@ -30,16 +30,16 @@ const configure = (app, logger) => {
     });
 
     ////react js project setup////
-    const root = path.join(__dirname, '../../trademax_admin_react/', 'build')
+    // const root = path.join(__dirname, '../../trademax_admin_react/', 'build')
 
-    app.use(express.static(root));
+    // app.use(express.static(root));
 
-    app.get('/*', function(req, res, next) {
-        if (!req.path.includes('api')) {
+    // app.get('/*', function(req, res, next) {
+    //     if (!req.path.includes('api')) {
 
-            res.sendFile('index.html', { root });
-        } else next();
-    });
+    //         res.sendFile('index.html', { root });
+    //     } else next();
+    // });
 
 
     //user api's //
