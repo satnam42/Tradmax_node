@@ -47,20 +47,20 @@ const create = async (model, context) => {
     const log = context.logger.start("services:carts:create");
     const isProductExists = await db.product.findById(model.
         productId)
-    if(!isProductExists){
+    if (!isProductExists) {
         throw new Error("product not found");
-    }else{
-        const checkcart = await db.cart.findOne({ 
-            user: { $eq: ObjectId(model.userId) }, 
+    } else {
+        const checkcart = await db.cart.findOne({
+            user: { $eq: ObjectId(model.userId) },
             product: { $eq: ObjectId(model.productId) },
             variation: { $eq: model.variation },
             status: { $eq: "Cart" }
         });
-        if(!checkcart){
+        if (!checkcart) {
             const cart = build(model, context);
             log.end();
             return cart;
-        }else{
+        } else {
             throw new Error("product already in cart");
         }
     }
@@ -68,11 +68,11 @@ const create = async (model, context) => {
 
 const getCarts = async (query, context) => {
     const log = context.logger.start(`services:carts:getCarts`);
-    const products = await db.cart.find({ "user": ObjectId(query.userId) }).populate('user').populate('product');
+    const products = await db.cart.find({ "user": ObjectId(query.userId), status: { $eq: 'Cart' } }).populate('user').populate('product');
     const product = [];
     for (let element of products) {
         let pId = element.product._id.toString();
-        let likesLs = await db.favorite.find({ user: { $eq: query.userId } ,product: { $eq: pId } });
+        let likesLs = await db.favorite.find({ user: { $eq: query.userId }, product: { $eq: pId } });
         let likes = await db.favorite.find({ product: { $eq: pId } });
         element.likeCount = likes.length;
         likesLs.forEach(like => {
@@ -92,23 +92,23 @@ const addToFav = async (model, context) => {
     const log = context.logger.start("services:carts:addToFav");
     const isProductExists = await db.product.findById(model.
         productId)
-    if(!isProductExists){
+    if (!isProductExists) {
         throw new Error("product not found");
     }
-    const isLiked = await db.favorite.findOne({ 
-        user: { $eq: ObjectId(model.userId) }, 
+    const isLiked = await db.favorite.findOne({
+        user: { $eq: ObjectId(model.userId) },
         product: { $eq: ObjectId(model.productId) },
         // variation: { $eq: model.variation } 
     });
-    if(isLiked){
-        let removeProduct = await db.favorite.deleteOne({ 
-            user: { $eq: ObjectId(model.userId) }, 
+    if (isLiked) {
+        let removeProduct = await db.favorite.deleteOne({
+            user: { $eq: ObjectId(model.userId) },
             product: { $eq: ObjectId(model.productId) },
             // variation: { $eq: model.variation } 
         });
         log.end();
         return removeProduct
-    }else{
+    } else {
         let favModel = {
             user: model.userId,
             product: model.productId,
@@ -156,15 +156,15 @@ const getFav = async (query, context) => {
 const deleteItem = async (id, context) => {
     const log = context.logger.start(`services:carts:deleteItem`);
     let isCartExists = await db.cart.findById(id);
-    if(isCartExists){
+    if (isCartExists) {
         const removeItem = await db.cart.remove({ '_id': id });
         log.end();
         return removeItem
-    }else{
+    } else {
         log.end();
         throw new Error("Cart item not found");
     }
-    
+
 };
 
 const updateAddress = (model, address, context) => {
@@ -205,7 +205,7 @@ const updateAddress = (model, address, context) => {
 
 const addAddress = async (model, context) => {
     const log = context.logger.start("services:carts:addAddress");
-    if(!model.addressId){
+    if (!model.addressId) {
         const { userId, fullName, address, city, state, zipCode, country } = model;
         // const log = context.logger.start(`services:carts:build${model}`);
         let addressModel = {
@@ -222,7 +222,7 @@ const addAddress = async (model, context) => {
         const saveAddress = await new db.address(addressModel).save();
         log.end();
         return saveAddress;
-    }else{
+    } else {
         const entity = await db.address.findById(model.addressId)
         if (!entity) {
             throw new Error("invalid ID");
@@ -233,13 +233,13 @@ const addAddress = async (model, context) => {
     }
 };
 
-const getAddress = async (body,context) => {
+const getAddress = async (body, context) => {
     const log = context.logger.start(`services:carts:getAddress`);
-    if(body.addressId){
+    if (body.addressId) {
         const address = await db.address.find({ _id: body.addressId }).populate('user');
         log.end();
         return address;
-    }else{
+    } else {
         const address = await db.address.find({ user: body.userId }).populate('user');
         log.end();
         return address;
