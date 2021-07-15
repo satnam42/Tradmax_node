@@ -213,7 +213,7 @@ const uploadProductFiles = async (id, files, model, context) => {
 
     } else {
         for (let file of files) {
-            const avatar = imageUrl + 'assets/images/' + file.filename
+            const avatar = file.filename
             let fileType = file.mimetype.split('/')[0]
             product.productFiles = product.productFiles.concat({ url: avatar, type: fileType })
         }
