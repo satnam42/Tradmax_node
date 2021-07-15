@@ -201,7 +201,7 @@ const uploadProductFiles = async (id, files, model, context) => {
         const uploadfile = []
         for (let file of files) {
             // const avatar = imageUrl + 'assets/images/' + file.filename
-            const avatar = file.filename
+            const avatar = 'http://13.54.226.124/images/' + file.filename
             console.log(avatar);
             let fileType = file.mimetype.split('/')[0]
             uploadfile.push({ url: avatar, type: fileType })
@@ -213,7 +213,7 @@ const uploadProductFiles = async (id, files, model, context) => {
 
     } else {
         for (let file of files) {
-            const avatar = file.filename
+            const avatar = 'http://13.54.226.124/images/' + file.filename
             let fileType = file.mimetype.split('/')[0]
             product.productFiles = product.productFiles.concat({ url: avatar, type: fileType })
         }
