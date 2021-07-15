@@ -202,6 +202,7 @@ const uploadProductFiles = async (id, files, model, context) => {
         for (let file of files) {
             // const avatar = imageUrl + 'assets/images/' + file.filename
             const avatar = file.filename
+            console.log(avatar);
             let fileType = file.mimetype.split('/')[0]
             uploadfile.push({ url: avatar, type: fileType })
         }

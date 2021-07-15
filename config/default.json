@@ -1,14 +1,14 @@
 {
     "db": {
-        "url": "mongodb://93.188.167.68:33017",
+        "url": "mongodb://localhost:27017",
         "database": "trademax"
     },
     "app": {
-        "url": "http://93.188.167.68",
+        "url": "http://13.54.226.124",
         "port": 4604
     },
     "webServer": {
-        "url": "http://93.188.167.68/",
+        "url": "http://13.54.226.124/",
         "port": 4604
     },
     "stripe": {
@@ -18,9 +18,10 @@
     "auth": {
         "jwtKey": "supersecret"
     },
-    "image": {
-        "url": "http://93.188.167.68/projects/trademax_nodejs/",
-        "port": 4604
+   "image": {
+    "url": "images/",
+    "baseUrl": "http://13.54.226.124/",
+    "port": 4604
     },
     "providers": {},
     "logger": {
