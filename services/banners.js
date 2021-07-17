@@ -20,7 +20,9 @@ const createBanner = async (files, body, context) => {
     if (!files) {
         throw new Error("image not found");
     }
-    const fileRes = imageUrl + 'assets/images/' + files[0].filename
+    const fileRes = 'http://13.54.226.124/images/' + files[0].filename
+    
+    // const fileRes = imageUrl + 'assets/images/' + files[0].filename
     let bannerModel = {}
     bannerModel.image = fileRes
     bannerModel.title = body.title
