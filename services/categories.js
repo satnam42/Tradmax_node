@@ -7,7 +7,7 @@ const createCategory = async (files, body, context) => {
     if (!files) {
         throw new Error("image not found");
     }
-    const fileRes = imageUrl + 'assets/images/' + files[0].filename
+    const fileRes = imageUrl + files[0].filename
     let categoryModel = {}
     categoryModel.image = fileRes
     categoryModel.name = body.name
@@ -27,7 +27,7 @@ const createSubCategory = async (files, body, context) => {
         log.end();
         throw new Error("Category not found");
     }
-    const fileRes = imageUrl + 'assets/images/' + files[0].filename
+    const fileRes = imageUrl + files[0].filename
     let subcatModel = {}
     subcatModel.image = fileRes
     subcatModel.name = body.name
