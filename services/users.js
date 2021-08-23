@@ -367,7 +367,7 @@ const uploadImage = async (files, body, context) => {
             console.log(err)
         }
     }
-    const image = imageUrl + 'assets/images/' + files[0].filename
+    const image = imageUrl + files[0].filename
     user.image = image
     await user.save();
     log.end();

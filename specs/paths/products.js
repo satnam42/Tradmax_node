@@ -272,7 +272,7 @@ module.exports = [{
                     in: "header",
                     name: "x-access-token",
                     description: "token to access api",
-                    required: true,
+                    required: false,
                     type: "string"
                 },
                 { in: 'body',
