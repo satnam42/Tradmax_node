@@ -389,9 +389,9 @@ const socialLink = async(model, context) => {
     let user = await db.user.findOne({ socialLinkId: model.socialLinkId });
     if (!user) {
         const userEmail = await db.user.findOne({ email: { $eq: model.email } });
-        if(userEmail){
-            throw new Error("Choose another email");
-        }
+        // if(userEmail){
+        //     throw new Error("Choose another email");
+        // }
         const createdUser = await buildUser(model, context);
         const token = auth.getToken(createdUser.id, false, context);
         createdUser.token = token;
