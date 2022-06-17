@@ -70,22 +70,24 @@ const getCarts = async (query, context) => {
     const log = context.logger.start(`services:carts:getCarts`);
     const products = await db.cart.find({ "user": ObjectId(query.userId), status: { $eq: 'Cart' } }).populate('user').populate('product');
     const product = [];
-    for (let element of products) {
-        let pId = element.product._id.toString();
-        let likesLs = await db.favorite.find({ user: { $eq: query.userId }, product: { $eq: pId } });
-        let likes = await db.favorite.find({ product: { $eq: pId } });
-        element.likeCount = likes.length;
-        likesLs.forEach(like => {
-            /*converting object id to string here*/
-            let prodId = like.product._id.toString();
-            if (prodId === pId) {
-                element.isLiked = true;
-            }
-        });
+    if(products.length > 0){
+        for (let element of products) {
+            let pId = element.product._id.toString();
+            let likesLs = await db.favorite.find({ user: { $eq: query.userId }, product: { $eq: pId } });
+            let likes = await db.favorite.find({ product: { $eq: pId } });
+            element.likeCount = likes.length;
+            likesLs.forEach(like => {
+                /*converting object id to string here*/
+                let prodId = like.product._id.toString();
+                if (prodId === pId) {
+                    element.isLiked = true;
+                }
+            });
         product.push(element);
+        }
     }
     log.end();
-    return products;
+    return product;
 };
 
 const addToFav = async (model, context) => {
